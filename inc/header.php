@@ -91,6 +91,9 @@ if (isset($_SESSION['MemEmail'])) {
   if (isset($community_css)) {
     echo $community_css;
   }
+  if (isset($summernote_css)) {
+    echo $summernote_css;
+  }
 
   ?>
   <!-- Favicon 기본 설정 -->
@@ -128,6 +131,9 @@ if (isset($_SESSION['MemEmail'])) {
 if (isset($slick_js)) {
   echo $slick_js;
 }
+if (isset($summernote_js)) {
+  echo $summernote_js;
+}
 ?>
 
 <body>
@@ -160,7 +166,7 @@ if (isset($slick_js)) {
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/notice.php">공지사항</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/faq.php">FAQ</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/qna.php">QnA</a></li>
-                <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/board.php">자유게시판</a></li>
+                <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/free.php">자유게시판</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/questions.php">질문게시판</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/study.php">스터디 모집</a></li> 
               </ul> <!-- <= href 알아서 수정바람 -->
