@@ -259,7 +259,7 @@ span{
     margin: 35px 0 45px 0;
     text-align: end;
   }
-  .send a{
+  .send button{
     padding:5px 20px;
     line-height: 24px;
     font-weight: 600;

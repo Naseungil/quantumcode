@@ -6,9 +6,20 @@ $summernote_js = "<script src=\"https://cdn.jsdelivr.net/npm/summernote@0.9.0/di
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
 
+$selectedCategory = isset($_POST['category']) ? $_POST['category'] : '';
+$placeholder = '';
+$value = '';
+
+if (in_array($selectedCategory, ['qna', 'free', 'questions'])) {
+    $placeholder = '글 작성 전, 비방이나 무례한 언행은 삼가주세요! 함께 쾌적한 공간을 만들어가요.';
+} elseif ($selectedCategory === 'study') {
+    $value = "[스터디 모집 내용 예시]\n스터디 주제 :\n스터디 목표 :\n스터디 규칙 :\n스터디 지원 방식 :";
+}
+
 ?>
 
 <div class="write container">
+<form action="community_new_ok.php" method="POST" enctype="multipart/form-data">
   <div class="row select d-flex">
     <input type="radio" class="btn-check" name="category" id="qna" autocomplete="off" checked>
     <label class="btn btn-outline-primary col-2" for="qna" value="qna">QnA</label>
@@ -23,15 +34,16 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
     <label class="btn btn-outline-primary col-2" for="study" value="study">스터디 모집</label>
   </div>
 
-<input type="text" class="form-control title" placeholder="제목을 입력하세요">
-<input type="text" class="form-control tag" placeholder="태그를 입력하세요">
+  <input type="text" name="title" class="form-control title" placeholder="제목을 입력하세요">
+  <input type="text" name="tag" class="form-control tag" placeholder="태그를 입력하세요">
 
-<textarea id="summernote" class ="content" name="content"></textarea>
+  <textarea id="summernote" name="content" class ="content" placeholder="<?php echo htmlspecialchars($placeholder); ?>"><?php echo htmlspecialchars($value); ?></textarea>
 
-<div class="send">
-  <a href="" class="btn" id="goback">취소</a>
-  <a href="community_write_ok.php" class="btn btn-primary">작성</a>
-</div>
+  <div class="send">
+    <button class="btn" id="goback">취소</button>
+    <button type="submit" class="btn btn-primary">등록</button>
+  </div>
+</form>
 </div>
 
 <script>
