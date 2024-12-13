@@ -4,6 +4,8 @@ $community_css = "<link href=\"http://{$_SERVER['HTTP_HOST']}/qc/css/community.c
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
 
+
+
 ?>
 
 <div class="title_box">
@@ -40,66 +42,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href="">게시글 제목</a></td>
-          <td>퀀텀코드</td>
-          <td>2024.12.09</td>
-        </tr>
         <tr>
           <th scope="row">1</th>
           <td class="post"><a href="">게시글 제목</a></td>
