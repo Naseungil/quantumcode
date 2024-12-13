@@ -25,14 +25,17 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/notice.php"><li>공지사항<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/faq.php"><li>FAQ<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/qna.php"><li>QnA<i class="fa-solid fa-chevron-right"></i></li></a>
-        <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/board.php" class="active"><li>자유게시판<i class="fa-solid fa-chevron-right"></i></li></a>
+        <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/free.php" class="active"><li>자유게시판<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/questions.php"><li>질문게시판<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/study.php"><li>스터디 모집<i class="fa-solid fa-chevron-right"></i></li></a>
       </ul>
     </aside>
   
     <div class="free content col-10">
-      <h6>수강생들의 자유로운 소통구간입니다.</h6>
+      <div class="top">
+        <h6>수강생들의 자유로운 소통구간입니다.</h6>
+        <a href="#" class="btn btn-primary">글쓰기</a>
+      </div>
       <hr>
       <table class="table table-hover text-center">
       <thead>
