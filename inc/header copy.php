@@ -91,9 +91,6 @@ if (isset($_SESSION['MemEmail'])) {
   if (isset($community_css)) {
     echo $community_css;
   }
-  if (isset($summernote_css)) {
-    echo $summernote_css;
-  }
 
   ?>
   <!-- Favicon 기본 설정 -->
@@ -131,9 +128,6 @@ if (isset($_SESSION['MemEmail'])) {
 if (isset($slick_js)) {
   echo $slick_js;
 }
-if (isset($summernote_js)) {
-  echo $summernote_js;
-}
 ?>
 
 <body>
@@ -166,7 +160,7 @@ if (isset($summernote_js)) {
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/notice.php">공지사항</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/faq.php">FAQ</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/qna.php">QnA</a></li>
-                <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/free.php">자유게시판</a></li>
+                <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/board.php">자유게시판</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/questions.php">질문게시판</a></li>
                 <li><a class="dropdown-item" href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/study.php">스터디 모집</a></li> 
               </ul> <!-- <= href 알아서 수정바람 -->
@@ -236,7 +230,7 @@ if (isset($summernote_js)) {
     <!-- 쪽지 모달 -->
     <div class="modal fade" id="messageModal" tabindex="-1" aria-labelledby="messageModalLabel" aria-hidden="true" data-bs-backdrop="false">
       <div class="modal-dialog" id="messageModalDialog" style="position: absolute;" >
-        <div class="modal-content" id="message-modal-content" style="width:200%; height:400px">
+        <div class="modal-content" id="message-modal-content" style="width:200%; height:450px">
           <div class="modal-header">
             <h5 class="modal-title" id="messageModalLabel"><i class="fas fa-envelope me-2"></i>쪽지</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -331,24 +325,6 @@ if (isset($summernote_js)) {
     </div>
   </div>
 
-  <!-- 쿠폰 발급 완료 모달 -->
-<div class="modal fade" id="couponModal" tabindex="-1" aria-labelledby="couponModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-dialog-centered">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="couponModalLabel">쿠폰 발급 완료</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        축하합니다! 쿠폰이 발급되었습니다.
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-bs-dismiss="modal">확인</button>
-      </div>
-    </div>
-  </div>
-</div>
-
 <!------- JavaScript -------->
 <script>
 document.addEventListener("DOMContentLoaded", function () {
@@ -392,66 +368,51 @@ document.addEventListener("DOMContentLoaded", function () {
   });
 
   // 폼 제출 전에 숨겨진 필드에 선택된 카테고리 저장 및 쿠폰 발급
-  form.addEventListener("submit", function (event) {
+form.addEventListener("submit", function (event) {
     event.preventDefault(); // 기본 폼 제출 동작 막기
 
     if (selectedCategories.length === 0) {
         alert("적어도 하나의 카테고리를 선택해주세요.");
     } else {
-        // AJAX 요청으로 save_categories.php에 데이터 전달
-        fetch("../qc/lecture/save_categories.php", {
+        // 선택된 카테고리를 숨겨진 필드에 저장
+        selectedCategoriesInput.value = JSON.stringify(selectedCategories);
+
+        // 쿠폰 발급 AJAX 요청
+        try{
+        fetch("/qc/coupon/give_coupon.php", {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
             },
-            body: JSON.stringify({ categories: selectedCategories }),
+            body: JSON.stringify({}),  //빈 객체를 넘겨준다. 
         })
         .then(response => response.json())
         .then(data => {
+          console.log(data);
             if (data.success) {
-                console.log("카테고리 저장 성공:", data.message);
+                console.log(data.message); // 성공 메시지 출력
 
-                // 기존 모달 모두 닫기
-                document.querySelectorAll('.modal').forEach(modal => {
-                    const instance = bootstrap.Modal.getInstance(modal);
-                    if (instance) instance.hide();
-                });
+                // 쿠폰 발급 완료 모달 표시
+                // const couponModal = new bootstrap.Modal(document.getElementById("couponModal"));
+                // couponModal.show();
 
-                // 쿠폰 발급 AJAX 요청
-                fetch("/qc/coupon/give_coupon.php", {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify({}), // 빈 객체를 넘겨준다.
-                })
-                .then(response => response.json())
-                .then(couponData => {
-                    if (couponData.success) {
-                        console.log(couponData.message); // 성공 메시지 출력
-
-                        // 쿠폰 발급 완료 모달 표시
-                        const couponModal = new bootstrap.Modal(document.getElementById("couponModal"));
-                        couponModal.show();
-
-                    } else {
-                        alert("쿠폰 발급 실패: " + couponData.error);
-                    }
-                })
-                .catch(error => {
-                    console.error("쿠폰 발급 AJAX 요청 오류:", error);
-                    alert("서버와 통신 중 문제가 발생했습니다.");
-                });
+                
             } else {
-                alert("카테고리 저장 실패: " + data.error);
+                alert("쿠폰 발급 실패: " + data.error);
             }
-        })
-        .catch(error => {
-            console.error("카테고리 저장 AJAX 요청 오류:", error);
+          })
+        }
+        catch(error){
+            console.error("AJAX 요청 오류:", error);
             alert("서버와 통신 중 문제가 발생했습니다.");
-        });
+        };
     }
   });
+
+
+
+
+
 
   const setModalPosition = (icon, modalDialog) => {
       const iconRect = icon.getBoundingClientRect();
@@ -479,45 +440,28 @@ document.addEventListener("DOMContentLoaded", function () {
 
   //안읽은(새) 쪽지가 있을때, 쪽지 모달을 클릭했을때, tomembermessages 테이블의 is_read 컬럼값을 1로 바꿔서 읽음 처리!
   const messageModal = document.getElementById("messageModal");
-const messageList = document.getElementById("messageList");
-
-// 모달이 열릴 때 실행되는 이벤트
-messageModal.addEventListener("show.bs.modal", function () {
-    // AJAX 요청으로 읽음 처리 및 최신순 쪽지 리스트 가져오기
-    fetch("/qc/chat&message/update_read_status.php", {
-        method: "POST",
-        headers: {
-            "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ receiver_id: <?= json_encode($memId); ?> }),
-    })
-    .then(response => response.json())
-    .then(data => {
-        if (data.success) {
-            console.log("쪽지 읽음 처리 완료");
-
-            // 쪽지 리스트를 최신순으로 렌더링
-            messageList.innerHTML = ""; // 기존 리스트 초기화
-            data.messages.forEach(message => {
-                const listItem = document.createElement("li");
-                listItem.className = "list-group-item d-flex flex-column mt-1";
-                listItem.innerHTML = `
-                    <div class="d-flex justify-content-between align-items-center">
-                        <strong class="text-primary">${message.sender_name}</strong>
-                        <small class="text-muted">${new Date(message.sent_at).toLocaleString()}</small>
-                    </div>
-                    <p class="mb-1 text-dark">${message.message_content}</p>
-                `;
-                messageList.appendChild(listItem);
-            });
-        } else {
-            console.error("쪽지 읽음 처리 실패:", data.error);
-        }
-    })
-    .catch(error => {
-        console.error("AJAX 요청 오류:", error);
-    });
-});
+  // 모달이 열릴 때 실행되는 이벤트
+  messageModal.addEventListener("show.bs.modal", function () {
+      // AJAX 요청으로 읽음 처리
+      fetch("/qc/chat&message/update_read_status.php", {
+          method: "POST",
+          headers: {
+              "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ receiver_id: <?= json_encode($memId); ?> }), //받는사람이 결국 memId과 같기떄문...
+      })
+          .then((response) => response.json())
+          .then((data) => {
+              if (data.success) {
+                  console.log("쪽지 읽음 처리 완료");
+              } else {
+                  console.error("쪽지 읽음 처리 실패", data.error);
+              }
+          })
+          .catch((error) => {
+              console.error("AJAX 요청 오류:", error);
+          });
+  });
 
 });
 

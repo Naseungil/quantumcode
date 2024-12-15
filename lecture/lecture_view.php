@@ -61,11 +61,16 @@ switch ($data->difficult) {
     break;
 }
 
-$buy_sql = "SELECT * FROM lecture_order WHERE  lid LIKE '%$lid%' AND mid = $userid";
-$buy_result = $mysqli->query($buy_sql);
-if ($buy_result) {
-  $buy_data = $buy_result->fetch_object();
-}
+// $buy_sql = "SELECT * FROM lecture_order WHERE lid LIKE '%$lid%' AND mid = $userid";
+
+// $buy_result = $mysqli->query($buy_sql) ;
+// if($buy_result->num_rows > 0)
+// {
+//   $buy_data = $buy_result->fetch_object();
+
+// }
+
+
 
 $couponArr = [];
 $coupon_sql = "SELECT cu.*, c.*  

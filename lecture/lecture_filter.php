@@ -98,7 +98,7 @@ if ($result && $result->num_rows > 0) {
           <img src=\"{$item->cover_image}\" alt=\"\">
         </div>
         <div class=\"title mb-2\">
-          <h5 class=\"small-font mb-0\"><a href=\"lecture_view.php?lid={$item->lid}\">{$item->title}</a></h5>
+          <h5 class=\"small-font mb-0\"><a href=\"lecture/lecture_view.php?lid=$item->lid\">{$item->title}</a></h5>
           <p class=\"name text-decoration-underline\">{$item->name}</p>
         </div>
         <div class=\"d-flex flex-column-reverse justify-content-start tuition\">

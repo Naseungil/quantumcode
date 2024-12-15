@@ -57,29 +57,82 @@ try {
 
         try {
             $mail->send();
-            echo "메세지가 보내졌습니다. 방금 작성하신 이메일을 확인해주세요.";
+            // echo "메세지가 보내졌습니다. 방금 작성하신 이메일을 확인해주세요.";
         } catch (Exception $e) {
             echo "메세지가 보내지지 않았습니다.. Mailer error: {$mail->ErrorInfo}";
         }
 
         // 동적 카운트다운 및 리다이렉션
-        echo <<<HTML
-        <br>
-        <p id="countdown">5초 후에 로그인 페이지로 이동합니다...</p>
-        <script>
-            let countdown = 5;
-            const countdownElement = document.getElementById('countdown');
-
-            const interval = setInterval(() => {
-                countdown--;
-                countdownElement.textContent = countdown + "초 후에 로그인 페이지로 이동합니다...";
-                if (countdown === 0) {
-                    clearInterval(interval);
-                    window.location.href = "http://localhost/qc/account/loginTest2.php";
-                }
-            }, 1000);
-        </script>
-        HTML;
+        echo "<!DOCTYPE html>
+<html lang='ko'>
+<head>
+    <meta charset='UTF-8'>
+    <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+    <title>저장 성공</title>
+    <link href='https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css' rel='stylesheet'>
+    <style>
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #f8f9fa;
+            font-family: Arial, sans-serif;
+        }
+        .message-box {
+            text-align: center;
+            padding: 20px;
+            border-radius: 10px;
+            background-color: #ffffff;
+            box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        .message-box h1 {
+            color: #28a745;
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        .message-box p {
+            color: #6c757d;
+            font-size: 18px;
+        }
+        .spinner {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            margin-top: 15px;
+            border: 4px solid #e9ecef;
+            border-radius: 50%;
+            border-top-color: #28a745;
+            animation: spin 1s linear infinite;
+        }
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class='message-box'>
+        <h1>인증 이메일 발송 성공!</h1>
+        <p>해당 이메일에서 인증을 완료해 주세요!</p>
+        <div class='spinner'></div>
+        <p id='countdown'>5초후 로그인 페이지로 이동합니다...</p>
+    </div>
+    <script>
+        let countdown = 5; // 초기 카운트다운 시간
+        const countdownElement = document.getElementById('countdown');
+        const interval = setInterval(function() {
+            countdown--;
+            countdownElement.textContent = countdown + '초후 로그인 페이지로 이동합니다...';
+            if (countdown <= 0) {
+                clearInterval(interval);
+                window.location.href = '/qc/account/loginTest2.php'; //로그인페이지로 리디렉션
+            }
+        }, 1000); // 1초마다 실행
+    </script>
+</body>
+</html>";
 
         exit();
     } else {

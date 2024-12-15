@@ -113,7 +113,7 @@ $lecture_dataArr = array_slice($lecture_dataArr, 0, 6); //총 6개만 보여줌
             <!-- 카드 본문 -->
             <div class="card-body d-flex flex-column">
               <h5 class="card-title text-primary fw-bold text-truncate"><?= $item->title ?></h5>
-              <p class="card-text text-muted text-truncate" style="max-height: 2rem;"><?= $item->description ?></p>
+
               <a href="/qc/admin/lecture/lecture_view.php?lid=<?= $item->lid; ?>" 
                 class="btn btn-primary mt-auto w-100" 
                 style="border-radius: 10px;">

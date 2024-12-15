@@ -33,23 +33,87 @@ if (strtotime($user["reset_token_expires_at"]) <= time()) { //토큰 만기시�
     <meta charset="UTF-8">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/water.css@2/out/water.css">
 </head>
+
+<style>
+    .reset-password-container {
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    background-color: #fff;
+    font-family: 'Arial', sans-serif;
+}
+
+.reset-password-container h1 {
+    text-align: center;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.reset-password-form {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+    color: #555;
+}
+
+.form-group input {
+    padding: 10px;
+    font-size: 14px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+.btn-submit {
+    background-color: #4CAF50;
+    color: white;
+    font-size: 16px;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.btn-submit:hover {
+    background-color: #45a049;
+}
+</style>
+
+
 <body>
 
-    <!-- 다시 한번 재설정 해줘야한다. -->
+<div class="reset-password-container">
     <h1>비밀번호 재설정</h1>
 
-    <form method="post" action="process_reset_password.php">
-
+    <form method="post" action="process_reset_password.php" class="reset-password-form">
         <input type="hidden" name="token" id="token" value="<?= htmlspecialchars($token) ?>">
 
-        <label for="password">New password</label>
-        <input type="password" id="password" name="password">
+        <div class="form-group">
+            <label for="password">새 비밀번호</label>
+            <input type="password" id="password" name="password" placeholder="새 비밀번호를 입력하세요" required>
+        </div>
 
-        <label for="password_confirmation">Repeat password</label>
-        <input type="password" id="password_confirmation"
-               name="password_confirmation">
-        <button>저장하기</button>
+        <div class="form-group">
+            <label for="password_confirmation">비밀번호 확인</label>
+            <input type="password" id="password_confirmation" name="password_confirmation" placeholder="비밀번호를 다시 입력하세요" required>
+        </div>
+
+        <button type="submit" class="btn-submit">저장하기</button>
     </form>
+</div>
 
 </body>
 </html>
