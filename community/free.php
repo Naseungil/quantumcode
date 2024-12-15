@@ -62,11 +62,15 @@ $next = min($total_page, $block_end + 1);
 
 
 // SQL 쿼리 작성
-if ($category == 'all') {
-  $sql = "SELECT * FROM board WHERE 1=1 $search_where ORDER BY pid DESC LIMIT $start_num, $list";
-} else {
-  $sql = "SELECT * FROM board WHERE category = 'free' $search_where ORDER BY pid DESC LIMIT $start_num, $list";
-}
+$sql = "SELECT board.*, 
+  (SELECT COUNT(*) FROM board_reply WHERE board_reply.b_pid = board.pid) AS comment_count
+  FROM board
+  WHERE 1=1 
+  " . ($category !== 'all' ? " AND category = '$category'" : '') . "
+  $search_where 
+  ORDER BY pid DESC 
+  LIMIT $start_num, $list
+";
 $result = $mysqli->query($sql);
 
 ?>
@@ -99,7 +103,7 @@ $result = $mysqli->query($sql);
     <div class="free content col-10">
       <div class="top">
         <h6>수강생들의 자유로운 소통구간입니다.</h6>
-        <a href="#" class="btn btn-primary">글쓰기</a>
+        <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/community_new.php" class="btn btn-primary">글쓰기</a>
       </div>
       <hr>
       <table class="table table-hover text-center">
@@ -135,13 +139,13 @@ $result = $mysqli->query($sql);
         <tr>
           <th scope="row"><?= $num ?></th>
           <td class="post">
-            <a href="community_view?pid=<?=$data->pid?>&category=<?=$category?>">
+            <a href="community_view.php?pid=<?=$data->pid?>">
               <?= $data->title ?>
             </a>
           </td>
           <td><?=$data->hit ? $data->hit : 0 ?></td>
           <td><?=$data->likes ? $data->likes : 0 ?></td>
-          <td>1</td>
+          <td><?= $data->comment_count ? $data->comment_count : 0 ?></td>
           <td><?=$post_date ?></td>
         </tr>
         <?php
