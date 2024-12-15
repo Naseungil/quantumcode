@@ -306,7 +306,40 @@ span{
     padding: 6px 10px;
     margin-right: 0.5em;
   }
+  .btn-outline-primary{
+    margin-right: 0.5em;
+  }
   hr{
     margin: 40px 0;
+  }
+  .comment.container{
+    padding: 0;
+  }
+  li{
+    list-style: none;
+    margin-bottom: 24px;
+  }
+  .commentbox{
+    border: solid 1px var(--lineGray);
+    padding: 34px 0;
+  }
+  .commentbox_title{
+    padding:0 40px 34px;
+    border-bottom:solid 1px var(--lineGray);
+    display: flex;
+    justify-content: space-between;
+    h3{
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--primary);
+    }
+    p{
+      font-size: 12px;
+      color: var(--darkGray);
+      margin-bottom: 0;
+    }
+  }
+  .commentbox_content{
+    padding:34px 40px 0;
   }
 }

@@ -91,17 +91,24 @@ switch ($category) {
   
   <hr>
 
-  <div class="" style="width: 18rem;">
+  <div class="comment container">
+  <form action="board_reply_ok.php" method="POST">
+  <input type="hidden" name="pid" value="<?= $pid ?>">
+  <input type="hidden" name="category" value="<?= $data->category ?>">
+  <button class="btn btn-primary btn-sm ">등록</button>
+    <textarea name="content" class="form-control w-25" placeholder="댓글내용을 입력 해주세요."></textarea>
+  </div>
+</form>
+
   <ul class="list-group list-group-flush">
     <?php
     // 댓글 및 대댓글을 함께 가져오는 쿼리
-    $reply_sql = "
-      SELECT r.pid AS reply_id, r.user_id AS reply_user, r.date AS reply_date, r.content AS reply_content,
-             rr.pid AS re_reply_id, rr.user_id AS re_reply_user, rr.date AS re_reply_date, rr.content AS re_reply_content, rr.r_pid
-      FROM board_reply r
-      LEFT JOIN board_re_reply rr ON r.pid = rr.r_pid
-      WHERE r.b_pid = $pid
-      ORDER BY r.date DESC, rr.date ASC
+    $reply_sql = "SELECT r.pid AS reply_id, r.user_id AS reply_user, r.date AS reply_date, r.content AS reply_content,
+      rr.pid AS re_reply_id, rr.user_id AS re_reply_user, rr.date AS re_reply_date, rr.content AS re_reply_content, rr.r_pid
+    FROM board_reply r
+    LEFT JOIN board_re_reply rr ON r.pid = rr.r_pid
+    WHERE r.b_pid = $pid
+    ORDER BY r.date DESC, rr.date ASC
     ";
     $reply_result = $mysqli->query($reply_sql);
 
@@ -133,21 +140,26 @@ switch ($category) {
     foreach ($replys as $replay_id => $reply) {
     ?>
       <!-- 댓글 출력 -->
-      <li class="list-group-item mb-3" style="border: 1px solid blue; border-radius:15px">
-        <div class="contents">
-          <div class="d-flex justify-content-between">
-            <small><?= $reply['user_id'] ?></small>
-            <small><?= $reply['date'] ?></small>
+      <li>
+        <div class="commentbox">
+          <div class="commentbox_title">
+            <div>
+              <h3><?= $reply['user_id'] ?></h3>
+              <p><?= $reply['date'] ?></p>
+            </div>
+
+            <div>
+              <button class="btn btn-outline-secondary"><i class="fa-solid fa-thumbs-up"></i> 0</button>
+              <button class="btn btn-outline-secondary"><i class="fa-solid fa-thumbs-down"></i> 0</button>
+              <button class="btn btn-outline-secondary" onclick="toggleReplyForm(<?= $replay_id ?>)"><i class="fa-regular fa-comment"></i> 0</button>
+              <button class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#reply_edit<?= $replay_id ?>">수정</button>
+              <a href="reply_delete.php?pid=<?= $replay_id ?>&b_pid=<?= $pid ?>&category=<?= $category ?>" class="btn btn-outline-danger">삭제</a>
+            </div>
           </div>
-          <hr>
-          <div class="content mb-3">
+          <div class="commentbox_content">
             <?= $reply['content'] ?>
           </div>
-          <div class="controls d-flex justify-content-end gap-1">
-            <button class="btn btn-secondary sm" onclick="toggleReplyForm(<?= $replay_id ?>)">대댓글</button>
-            <button class="btn btn-primary sm" data-bs-toggle="modal" data-bs-target="#reply_edit<?= $replay_id ?>">수정</button>
-            <a href="reply_delete.php?pid=<?= $replay_id ?>&b_pid=<?= $pid ?>&category=<?= $category ?>" class="btn btn-danger sm">삭제</a>
-          </div>
+          
           <!-- modal -->
           <div class="modal fade" id="reply_edit<?= $replay_id ?>" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog">
