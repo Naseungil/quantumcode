@@ -65,7 +65,7 @@ $next = min($total_page, $block_end + 1);
 if ($category == 'all') {
   $sql = "SELECT * FROM board WHERE 1=1 $search_where ORDER BY pid DESC LIMIT $start_num, $list";
 } else {
-  $sql = "SELECT * FROM board WHERE category = '$category' $search_where ORDER BY pid DESC LIMIT $start_num, $list";
+  $sql = "SELECT * FROM board WHERE category = 'free' $search_where ORDER BY pid DESC LIMIT $start_num, $list";
 }
 $result = $mysqli->query($sql);
 
@@ -116,12 +116,14 @@ $result = $mysqli->query($sql);
       <tbody>
       <?php
       // 게시글 출력
+      $num = $total_count - $start_num;
       while($data = $result->fetch_object()){
         $post_date = date("Y-m-d", strtotime($data->date)); // date 컬럼의 타임스탬프를 Y-m-d 형식으로 변환
         $current_date = date("Y-m-d");
-
+        
         $content = $data->content;
         $title_cut = $data->title;
+        
         // 제목이 길 경우 10글자로 자르기
         if(iconv_strlen($title_cut) > 10){
           $title_cut = iconv_substr($title_cut, 0, 10) . '...';
@@ -131,10 +133,10 @@ $result = $mysqli->query($sql);
         }
         ?>
         <tr>
-          <th scope="row"><?= $data->pid ?></th>
+          <th scope="row"><?= $num ?></th>
           <td class="post">
             <a href="community_view?pid=<?=$data->pid?>&category=<?=$category?>">
-              <?= $data->title_cut ?>
+              <?= $data->title ?>
             </a>
           </td>
           <td><?=$data->hit ? $data->hit : 0 ?></td>
@@ -143,18 +145,47 @@ $result = $mysqli->query($sql);
           <td><?=$post_date ?></td>
         </tr>
         <?php
+        $num--;
         }
         ?>
       </tbody>
       </table>
 
       <nav aria-label="Page navigation">
-        <ul class="pagination">
-          <li class="page-item"><a class="page-link" href="#"><img src="../img/icon-img/CaretLeft.svg" alt=""></a></li>
-          <li class="page-item"><a class="page-link" href="#">1</a></li>
-          <li class="page-item"><a class="page-link" href="#"><img src="../img/icon-img/CaretRight.svg" alt=""></a></li>
-        </ul>
-      </nav>
+    <ul class="pagination">
+      <?php
+        if ($block_num > 1) { //prev 버튼
+          $prev = $block_start - $block_ct;
+          echo "<li class=\"page-item prev\">
+              <a class=\"page-link\" href=\"free.php?category={$category}&page={$prev}\">
+                  <img src=\"http://{$_SERVER['HTTP_HOST']}/qc/img/icon-img/CaretLeft.svg\" alt=\"페이지네이션 prev\">
+              </a>
+          </li>";
+        }
+      ?>
+        
+      <?php
+        // 페이지 번호 표시
+        for ($i = $block_start; $i <= $block_end; $i++) {                
+          $active = ($page == $i) ? 'active' : '';
+      ?>
+      <li class="page-item <?= $active; ?>"><a class="page-link" href="free.php?category=<?=$category?>&page=<?= $i; ?>&search_keyword=<?=$search_keyword?>"><?= $i; ?></a></li>
+      <?php
+        }
+        $next = $block_end + 1;
+        if($total_block >  $block_num){ //next 버튼
+      ?>
+      <li class="page-item next">
+        <a class="page-link" href="free.php?category=<?=$category?>&page=<?= $next;?>">
+          <img src="http://<?= $_SERVER['HTTP_HOST'] ?>/qc/img/icon-img/CaretRight.svg" alt="페이지네이션 next">
+        </a>
+      </li>
+      <?php
+      }         
+      ?>
+    </ul>
+  </nav>
+
 
     </div>
   </div>
