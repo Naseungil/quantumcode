@@ -331,7 +331,7 @@ while ($video_data = $video_result->fetch_object()) {
 
     let formData = new FormData(); //페이지전환 없이, 폼전송없이(submit 이벤트 없이) 파일 전송, 빈폼을 생성
     formData.append('savefile', file); //<input type="file" name="savefile" value="file"> 이미지 첨부
-    formData.append('lid', $('#lid').val());
+
 
     $.ajax({
       url: 'lecture_add_video.php',

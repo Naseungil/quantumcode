@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- 생성 시간: 24-12-02 10:22
+-- 생성 시간: 24-12-17 08:42
 -- 서버 버전: 10.4.32-MariaDB
 -- PHP 버전: 8.2.12
 
@@ -29,7 +29,7 @@ SET time_zone = "+00:00";
 
 CREATE TABLE `lecture_cart` (
   `cartid` int(11) NOT NULL COMMENT '장바구니 고유번호',
-  `mid` int(11) NOT NULL COMMENT '회원 고유번호',
+  `mid` varchar(100) NOT NULL COMMENT '회원 고유번호',
   `lid` int(11) NOT NULL COMMENT '강의 고유번호',
   `price` decimal(50,0) NOT NULL COMMENT '가격',
   `regdate` datetime NOT NULL DEFAULT current_timestamp() COMMENT '작성시간'
@@ -53,7 +53,7 @@ ALTER TABLE `lecture_cart`
 -- 테이블의 AUTO_INCREMENT `lecture_cart`
 --
 ALTER TABLE `lecture_cart`
-  MODIFY `cartid` int(11) NOT NULL AUTO_INCREMENT COMMENT '장바구니 고유번호';
+  MODIFY `cartid` int(11) NOT NULL AUTO_INCREMENT COMMENT '장바구니 고유번호', AUTO_INCREMENT=20;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

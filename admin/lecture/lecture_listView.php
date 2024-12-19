@@ -17,7 +17,7 @@ if (!isset($_SESSION['AUID'])) {
 }
 
 //인기 강의
-$sql = "SELECT * FROM lecture_list WHERE ispopular = 1";
+$sql = "SELECT * FROM lecture_list WHERE ispopular = 1 ORDER BY regist_day ASC";
 $result = $mysqli->query($sql);
 $dataArr = [];
 while ($data = $result->fetch_object()) {
@@ -26,7 +26,7 @@ while ($data = $result->fetch_object()) {
 
 
 //프리미엄 강의
-$sql2 = "SELECT * FROM lecture_list WHERE ispremium = 1";
+$sql2 = "SELECT * FROM lecture_list WHERE ispremium = 1  ORDER BY regist_day ASC";
 $result2 = $mysqli->query($sql2);
 $dataArr2 = [];
 while ($data2 = $result2->fetch_object()) {
@@ -35,7 +35,7 @@ while ($data2 = $result2->fetch_object()) {
 
 
 //추천강의
-$sql3 = "SELECT * FROM lecture_list WHERE isrecom = 1";
+$sql3 = "SELECT * FROM lecture_list WHERE isrecom = 1  ORDER BY regist_day ASC";
 $result3 = $mysqli->query($sql3);
 $dataArr3 = [];
 while ($data3 = $result3->fetch_object()) {
@@ -45,7 +45,7 @@ while ($data3 = $result3->fetch_object()) {
 
 
 //무료강의
-$sql4 = "SELECT * FROM lecture_list WHERE isfree = 1";
+$sql4 = "SELECT * FROM lecture_list WHERE isfree = 1  ORDER BY regist_day ASC";
 $result4 = $mysqli->query($sql4);
 $dataArr4 = [];
 while ($data4 = $result4->fetch_object()) {

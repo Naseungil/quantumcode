@@ -30,19 +30,19 @@ if (strtotime($user["reset_token_expires_at"]) <= time()) {
 }
 
 if (strlen($_POST["password"]) < 8) {
-    die("Password must be at least 8 characters");
+    die("비밀번호는 8자 이상이어야 합니다.");
 }
 
 if ( ! preg_match("/[a-z]/i", $_POST["password"])) {
-    die("Password must contain at least one letter");
+    die("비밀번호는 문자 한 개 이상을 포함해야 합니다.");
 }
 
 if ( ! preg_match("/[0-9]/", $_POST["password"])) {
-    die("Password must contain at least one number");
+    die("비밀번호는 숫자 한 개 이상을 포함해야 합니다.");
 }
 
 if ($_POST["password"] !== $_POST["password_confirmation"]) {
-    die("Passwords must match");
+    die("두 비밀번호는 동일해야 합니다.");
 }
 
 

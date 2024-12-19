@@ -14,7 +14,7 @@ if ($name && $value) {
     // SQL 쿼리 작성
     if ($name === 'email') {
         // 이메일 중복 체크
-        $sql = "SELECT COUNT(*) AS cnt FROM memberskakao WHERE email = '$value'";
+        $sql = "SELECT COUNT(*) AS cnt FROM memberskakao WHERE memEmail = '$value'";
     } elseif ($name === 'number') {
         //전화번호 중복 체크
         $sql = "SELECT COUNT(*) AS cnt FROM memberskakao WHERE number = '$value'";

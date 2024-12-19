@@ -90,15 +90,19 @@ if (strtotime($user["reset_token_expires_at"]) <= time()) { //토큰 만기시�
 .btn-submit:hover {
     background-color: #45a049;
 }
+.reset-password-container p {
+        margin: 0; /* 상하 간격 제거 */
+        font-size: 13px; /* 글씨 크기 10px로 설정 */
+    }
 </style>
 
 
 <body>
 
 <div class="reset-password-container">
-    <h1>비밀번호 재설정</h1>
+    <h2>비밀번호를 재설정 하세요.</h2>
 
-    <form method="post" action="process_reset_password.php" class="reset-password-form">
+    <form method="post" action="process_reset_password.php" class="reset-password-form" id="resetPasswordForm">
         <input type="hidden" name="token" id="token" value="<?= htmlspecialchars($token) ?>">
 
         <div class="form-group">
@@ -109,11 +113,31 @@ if (strtotime($user["reset_token_expires_at"]) <= time()) { //토큰 만기시�
         <div class="form-group">
             <label for="password_confirmation">비밀번호 확인</label>
             <input type="password" id="password_confirmation" name="password_confirmation" placeholder="비밀번호를 다시 입력하세요" required>
+            <p id="error-message" style="color: red; font-size: 14px; display: none;">두 비밀번호가 일치하지 않습니다.</p>
         </div>
+        <p>비밀번호는 8자 이상이어야 합니다.</p>
+        <P>비밀번호는 문자 한 개 이상을 포함해야 합니다.</P>
+        <p>비밀번호는 숫자 한 개 이상을 포함해야 합니다.</p>
 
         <button type="submit" class="btn-submit">저장하기</button>
     </form>
 </div>
+
+<script>
+    document.getElementById('resetPasswordForm').addEventListener('submit', function (e) {
+        const password = document.getElementById('password').value;
+        const passwordConfirmation = document.getElementById('password_confirmation').value;
+        const errorMessage = document.getElementById('error-message');
+
+        // 비밀번호가 일치하지 않는 경우
+        if (password !== passwordConfirmation) {
+            e.preventDefault(); // 폼 제출 방지
+            errorMessage.style.display = 'block'; // 에러 메시지 표시
+        } else {
+            errorMessage.style.display = 'none'; // 에러 메시지 숨김
+        }
+    });
+</script>
 
 </body>
 </html>

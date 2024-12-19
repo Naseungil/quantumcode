@@ -3,9 +3,16 @@ $title = "강의 목록";
 
 $lecture_css = "<link href=\"http://{$_SERVER['HTTP_HOST']}/qc/css/lecture.css\" rel=\"stylesheet\">";
 
-include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/admin/inc/header.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
 
-$userid = 5;
+if ($email === '') {
+  echo "<script>
+  alert('로그인 이후 이용 가능한 기능입니다');
+  history.back();
+  </script>";
+}
+
+// $userid = 5;
 $total = 0;
 $dataArr = [];
 $lidArr = [];
@@ -14,7 +21,7 @@ $sql = "SELECT lc.*, ll.cover_image, ll.t_id, ll.title, ll.lid
 FROM lecture_cart lc
 JOIN lecture_list ll
 ON lc.lid = ll.lid
-WHERE mid = $userid";
+WHERE mid = '$email'";
 $result = $mysqli->query($sql);
 while ($row = $result->fetch_object()) {
   $dataArr[] = $row;
@@ -24,8 +31,6 @@ while ($row = $result->fetch_object()) {
 $lid = implode(',', $lidArr);
 
 
-
-
 $couponArr = [];
 $coupon_sql = "SELECT cu.*, c.*  
 FROM coupons_usercp cu
@@ -33,103 +38,103 @@ JOIN coupons c
 ON c.cid = cu.couponid
 WHERE cu.status = 1
 AND c.status = 1
-AND cu.userid = $userid
-AND cu.use_max_date >=now() ";
+AND cu.userid = '$email'
+ ";
+// AND cu.use_max_date >=now() 만료일이 있다면 now 함수를 이용하여 조건
 $coupon_result = $mysqli->query($coupon_sql);
 while ($coupon_row = $coupon_result->fetch_object()) {
   $couponArr[] = $coupon_row;
 }
 
 
-$user_sql = "SELECT * FROM members WHERE mid = $userid";
+$user_sql = "SELECT * FROM memberskakao WHERE memEmail = '$email'";
 $user_result = $mysqli->query($user_sql);
 $user_data = $user_result->fetch_object();
 $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3, 4) . "-" . substr($user_data->number, 7);
 
 
-
-
-
-
 ?>
-<div class="row">
-  <div class="col-9">
-    <div class="d-flex justify-content-between align-items-center order-head mb-3">
-      <span class="">
-        <input type="checkbox" class="cart_check" name="select_all" id="select_all">
-        <label for="select_all" class="cart_label"></label>
-        <strong class="w-100">전체선택</strong>
-      </span>
-      <button class="btn btn-secondary sel_delete">선택 삭제</button>
-    </div>
-    <hr>
-    <table class="table ">
-      <thead>
-        <tr class="visually-hidden">
-          <th scope="col"><input type="checkbox" name="" id=""></th>
-          <th scope="col">커버이미지</th>
-          <th scope="col">강의 정보</th>
-          <th scope="col">강의 가격</th>
-        </tr>
-      </thead>
+<div class="container cart">
+  <h2>수강바구니</h2>
+  <div class="row">
+    <div class="col-9">
+      <div class="d-flex justify-content-between align-items-center order-head mb-3">
+        <span class="">
+          <input type="checkbox" class="cart_check" name="select_all" id="select_all">
+          <label for="select_all" class="cart_label"></label>
+          <strong class="w-100 cart_tr">전체선택</strong>
+        </span>
+        <button class="btn btn-secondary sel_delete">선택 삭제</button>
+      </div>
+      <hr>
+      <table class="table ">
+        <thead>
+          <tr class="visually-hidden">
+            <th scope="col"><input type="checkbox" name="" id=""></th>
+            <th scope="col">커버이미지</th>
+            <th scope="col">강의 정보</th>
+            <th scope="col">강의 가격</th>
+          </tr>
+        </thead>
 
-      <tbody>
-        <?php
-        if (!empty($dataArr)) {
-          foreach ($dataArr as $data) {
-        ?>
-            <tr>
-              <th>
-                <input type="checkbox" class="cart_check" name="l_check" id="l_check<?= $data->lid ?>" data-id="<?= $data->lid ?>" data-price="<?= $data->price ?>">
-                <label for="l_check<?= $data->lid ?>" class="cart_label"></label>
-              </th>
-              <td><img src="<?= $data->cover_image ?>" width="150" alt=""></td>
-              <td><?= $data->title ?></td>
-              <td id="total_price"><?= number_format($data->price) ?> 원</td>
-            </tr>
-        <?php
-          }
-        }
-        ?>
-      </tbody>
-    </table>
-  </div>
-  <div class="col-3 payment">
-    <dl>
-      <dt>신청자</dt>
-      <dd><?= $user_data->name ?></dd>
-      <dt>이메일</dt>
-      <dd><?= $user_data->email ?></dd>
-      <dt>전화번호</dt>
-      <dd><?= $callnum ?></dd>
-
-      <dt>쿠폰</dt>
-      <dd>
-        <select class="form-select" name="coupon" id="coupon">
-          <option value="0" selected>쿠폰 선택</option>
+        <tbody>
           <?php
-          if (!empty($couponArr)) {
-            foreach ($couponArr as $coupon) {
-              $price = 0;
-              if ($coupon->coupon_type === 'fixed') {
-                $price = $coupon->coupon_price;
-              } else {
-                $price = $coupon->coupon_ratio;
-              }
+          if (!empty($dataArr)) {
+            foreach ($dataArr as $data) {
           ?>
-              <option value="<?= $coupon->ucid ?>" data-price="<?= $price ?>"><?= $coupon->coupon_name ?> </option>
+              <tr>
+                <th>
+                  <input type="checkbox" class="cart_check" name="l_check" id="l_check<?= $data->lid ?>" data-id="<?= $data->lid ?>" data-price="<?= $data->price ?>">
+                  <label for="l_check<?= $data->lid ?>" class="cart_label"></label>
+                </th>
+                <td><img src="<?= $data->cover_image ?>" width="150" alt=""></td>
+                <td><?= $data->title ?></td>
+                <td id="total_price"><?= number_format($data->price) ?> 원</td>
+              </tr>
           <?php
             }
           }
           ?>
-        </select>
-      </dd>
-    </dl>
-    <div class="d-flex justify-content-between">
-      <span class="font">결제 금액</span><span class="normal-font total_payment"> 0 원</span>
+        </tbody>
+      </table>
     </div>
-    <div class="control m-3">
-      <button type="button" class="payment_btn btn btn-primary w-100">결제하기</button>
+    <div class="col-3 payment">
+      <dl>
+        <dt>신청자</dt>
+        <dd><?= $user_data->memName ?></dd>
+        <dt>이메일</dt>
+        <dd><?= $user_data->memEmail ?></dd>
+        <dt>전화번호</dt>
+        <dd><?= $callnum ?></dd>
+
+        <dt>쿠폰</dt>
+        <dd>
+          <select class="form-select" name="coupon" id="coupon">
+            <option value="0" selected>쿠폰 선택</option>
+            <?php
+            if (!empty($couponArr)) {
+              foreach ($couponArr as $coupon) {
+                $price = 0;
+                if ($coupon->coupon_type === 'fixed') {
+                  $price = $coupon->coupon_price;
+                } else {
+                  $price = $coupon->coupon_ratio;
+                }
+            ?>
+                <option value="<?= $coupon->ucid ?>" data-price="<?= $price ?>"><?= $coupon->coupon_name ?> </option>
+            <?php
+              }
+            }
+            ?>
+          </select>
+        </dd>
+      </dl>
+      <div class="d-flex justify-content-between">
+        <span class="font">결제 금액</span><span class="normal-font total_payment"> 0 원</span>
+      </div>
+      <div class="control m-3">
+        <button type="button" class="payment_btn btn btn-primary w-100">결제하기</button>
+      </div>
     </div>
   </div>
 </div>
@@ -140,6 +145,8 @@ $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3
   let numericValue = total_payment.replace(/[^0-9]/g, '');
   const lec_check = document.querySelectorAll('.table input[type="checkbox"]');
   const sel_delete = document.querySelector('.sel_delete');
+  const cart_tr = document.querySelector('.cart_tr');
+  const sel_all = document.getElementById('select_all');
 
   let checkArr = [];
   let priceArr = [];
@@ -150,7 +157,7 @@ $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3
   // 결제 할때 fetch 함수를 통해 결제한 그 데이터를 저장
   paymentBtn.addEventListener('click', () => {
     const ucid = coupon.value;
-    const mid = "<?= $userid ?>";
+    const mid = '<?= $email ?>';
     // const lid = "<?= $lid ?>";
     // const total = numericValue;
     console.log(mid, lid, sum_price);
@@ -160,6 +167,7 @@ $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3
       mid: mid,
       total_price: sum_price,
     });
+    console.log(data);
     fetch('lecture_payment.php', {
         method: 'post',
         body: data,
@@ -243,7 +251,7 @@ $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3
       if (check.checked == 1) {
         sum_price += check_price;
         checkArr.push(check_id);
-        console.log(sum_price);
+        console.log(sum_price, check_id);
 
       } else {
         checkArr = checkArr.filter(item => item !== check_id);
@@ -251,13 +259,17 @@ $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3
         console.log(sum_price);
       }
       lid = checkArr.join(',');
-
+      console.log(lid);
       document.querySelector('.total_payment').innerText = numberFormat(sum_price) + '원';
       // console.log(sum);
     })
   })
 
-  document.getElementById('select_all').addEventListener('click', function() {
+  cart_tr.addEventListener('click', function() {
+    sel_all.addEventListener('trig')
+  })
+
+  sel_all.addEventListener('click', function() {
     const isChecked = this.checked;
     document.querySelectorAll('.cart_check').forEach(checkbox => {
       checkbox.checked = isChecked; // 체크박스 상태 변경
@@ -269,5 +281,5 @@ $callnum = substr($user_data->number, 0, 3) . "-" . substr($user_data->number, 3
 
 
 <?php
-include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/admin/inc/footer.php');
+include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/footer.php');
 ?>

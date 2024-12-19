@@ -19,6 +19,11 @@
   --blueGray: #f8f9fa;
   --black: #000000;
 }
+html,
+body {
+  height: 100%; /* 화면 전체 높이를 100%로 */
+  margin: 0; /* 기본 여백 제거 */
+}
 
 /* Text Style */
 body {
@@ -26,6 +31,8 @@ body {
     "Malgun Gothic", sans-serif;
   font-weight: 500;
   overflow-x: hidden;
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
 
   /* background-color: #757575; */
 }
@@ -57,8 +64,8 @@ body {
   font: 14/20px "Noto Sans KR", sans-serif;
   font-weight: 500;
 }
-.btn{
-  border-radius:5px !important;
+.btn {
+  border-radius: 3px !important;
 }
 /* NAV */
 .navbar {
@@ -236,6 +243,7 @@ body {
   font-size: 14px;
   color: #666;
   text-align: left;
+  margin-top: auto;
 }
 .footer a {
   text-decoration: none;
@@ -251,13 +259,12 @@ body {
   font-size: 16px;
 }
 
-
 /* 모달 전체 스타일 */
 .modal-content {
   border-radius: 10px; /* 모서리를 둥글게 */
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3); /* 그림자 효과 */
   overflow: hidden; /* 내부 요소가 영역을 넘지 않도록 */
-  font-family: 'Arial', sans-serif; /* 폰트 설정 */
+  font-family: "Arial", sans-serif; /* 폰트 설정 */
 }
 
 /* 모달 헤더 */
@@ -265,12 +272,12 @@ body {
   background-color: #007bff; /* 파란색 배경 */
   color: white; /* 흰색 텍스트 */
   padding: 5px 8px; /* 패딩 추가 */
-  font-size : 10px;
+  font-size: 10px;
 }
 
 .modal-title {
   font-weight: normal; /* 글씨 굵게 */
-  font-size : 15px;
+  font-size: 15px;
 }
 
 /* 모달 본문 */
@@ -293,13 +300,12 @@ body {
   border-radius: 10px; /* 둥근 버튼 */
   padding: 5px 10px;
   transition: background-color 0.3s ease; /* 부드러운 색상 전환 */
-  font-size : 15px;
+  font-size: 15px;
 }
 
 .btn-custom:hover {
   background-color: #0056b3; /* 호버 시 색상 변경 */
   color: white; /* 흰색 텍스트 */
-
 }
 
 .btn-secondary {
@@ -316,7 +322,6 @@ body {
 .modal-footer .btn-view-all {
   margin-right: auto; /* 왼쪽 정렬 */
 }
-
 
 #welcomeModal .modal-header {
   background-color: #007bff; /* 파란색 배경 */

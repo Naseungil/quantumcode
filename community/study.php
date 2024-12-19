@@ -5,7 +5,45 @@ $community_css = "<link href=\"http://{$_SERVER['HTTP_HOST']}/qc/css/community.c
 include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
 
 ?>
+<!-- 스타일 -->
+<style>
+  #inquiryButton {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    padding: 8px 16px;
+    font-size: 14px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
 
+  #inquiryButton:hover {
+    background-color: #0056b3;
+  }
+
+  .modal-content {
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .modal-header {
+    background-color: #007bff;
+    color: #fff;
+    border-bottom: none;
+    border-radius: 10px 10px 0 0;
+  }
+
+  .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+  }
+
+  .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+  }
+</style>
 <div class="search_box">
   <div class="container">
     <h2><?= $title ?></h2>
@@ -25,39 +63,41 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/notice.php"><li>공지사항<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/faq.php"><li>FAQ<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/qna.php"><li>QnA<i class="fa-solid fa-chevron-right"></i></li></a>
-        <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/free.php"><li>자유게시판<i class="fa-solid fa-chevron-right"></i></li></a>
-        <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/questions.php"><li>질문게시판<i class="fa-solid fa-chevron-right"></i></li></a>
+        <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/board.php"><li>자유게시판<i class="fa-solid fa-chevron-right"></i></li></a>
         <a href="http://<?php echo $_SERVER['HTTP_HOST']; ?>/qc/community/study.php" class="active"><li>스터디 모집<i class="fa-solid fa-chevron-right"></i></li></a>
       </ul>
     </aside>
   
-    <div class="questions content col-10">
-      <div class="top">
-        <h6>함께 공부할 수강생을 찾습니다.</h6>
-        <a href="#" class="btn btn-primary">글쓰기</a>
+    <div class="qna content col-10">
+      <div class="d-flex justify-content-between align-items-center">
+        <h6>함께 공부할 수강생을 직접 찾아보세요!</h6>
+        <!-- 문의하기 버튼 -->
+        <button class="btn btn-primary" id="inquiryButton">동료 찾기</button>
       </div>
       <hr>
       <table class="table table-hover text-center">
-      <thead>
-        <tr>
-          <th scope="col" class="num">No</th>
-          <th scope="col">제목</th>
-          <th scope="col" class="view">조회</th>
-          <th scope="col" class="recommend">UP</th>
-          <th scope="col" class="answer">답변</th>
-          <th scope="col" class="date">게시일</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr>
-          <th scope="row">1</th>
-          <td class="post"><a href=""><span>모집중</span> 게시글 제목</a></td>
-          <td>133</td>
-          <td>0</td>
-          <td>1</td>
-          <td>2024.12.09</td>
-        </tr>
-      </tbody>
+        <thead>
+          <tr>
+            <th scope="col" class="num" style="width: 5%;">No</th>
+            <th scope="col" style="width: 15%;">제목</th>
+            <th scope="col" style="width: 35%;">내용</th>
+            <th scope="col" style="width: 10%;">글쓴이</th>
+            <th scope="col" style="width: 7.5%;">조회</th>
+            <th scope="col" style="width: 7.5%;">답변</th>
+            <th scope="col" style="width: 20%;">게시일</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <th scope="row"></th>
+            <td class="post"><a href="#"></a></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+          </tr>
+        </tbody>
       </table>
       
       <nav aria-label="Page navigation">
@@ -67,7 +107,6 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
           <li class="page-item"><a class="page-link" href="#"><img src="../img/icon-img/CaretRight.svg" alt=""></a></li>
         </ul>
       </nav>
-
     </div>
   </div>
 

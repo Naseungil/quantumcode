@@ -3,7 +3,7 @@
 function fileUpload($file, $type)
 {
   // 파일 크기 검사 (10MB 이하)
-  if ($file['size'] > 10240000) {
+  if ($file['size'] > 102400000) {
     echo "
         <script>
             alert('10MB이하만 첨부할 수 있습니다.');

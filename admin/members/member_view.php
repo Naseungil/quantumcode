@@ -13,16 +13,14 @@ if(!isset($_SESSION['AUID'])){
       </script>
     ";
 }
-$mid = $_GET['mid'];
-if (!isset($mid)) {
-  echo "<script>alert('관련 정보가 없습니다.'); location.href = '../teachers/teacher_list.php';</script>";
+$memId = $_GET['memId'];
+if (!isset($memId)) {
+  echo "<script>alert('관련 정보가 없습니다.'); location.href = '../members/member_list.php';</script>";
 }
 
-$sql = "SELECT * FROM members WHERE mid = $mid";  //여기서 mid는 숫자.
+$sql = "SELECT * FROM membersKakao WHERE memId = $memId";  //여기서 memId는 숫자.
 $result = $mysqli->query($sql); //쿼리 실행 결과
 $data = $result->fetch_object();
-
-
 
 
 
@@ -34,11 +32,11 @@ $data = $result->fetch_object();
   <div class="row teacher">
     <div class="col-3 mb-5">
       <div class="teacher_coverImg2 mb-3">
-        <img src="<?= $data->cover_image; ?>" id="coverImg" alt="" width="200" height="200" style="object-fit: cover; border-radius: 25%;">
+        <img src="<?= $data->memProfilePath; ?>" id="coverImg" alt="" width="200" height="200" style="object-fit: cover; border-radius: 25%;">
       </div>
       <div>
-        <h5>이름 : <?= $data->name; ?></h5>
-        <h6>아이디  : <?= $data->id; ?></h6>
+        <h5>이름 : <?= $data->memName; ?></h5>
+        <h6>아이디  : <?= $data->memEmail; ?></h6>
       </div>
       <hr>
       <div class="d-flex justify-content-center align-items-center gap-5">
@@ -60,7 +58,7 @@ $data = $result->fetch_object();
         <ul>
           <?php if (isset($data)) { ?> 
           <li class="my-2">
-            <a href="teacher_view.php?mid=<?= $data->mid;?>" class="text-decoration-none">홈</a>
+            <a href="teacher_view.php?memId=<?= $data->memId;?>" class="text-decoration-none">홈</a>
           </li>
           <li class="my-2">
             <a href="#" class="text-decoration-none"  id="nav_all_lectures">수강 중인 강의</a>
@@ -111,7 +109,7 @@ $data = $result->fetch_object();
                 <tr>
                   <th scope="row">회원 고유 ID</th>
                   <td>
-                    <input type="text" class="form-control" name="name" id="name" placeholder="<?= $data->mid; ?>" disabled>
+                    <input type="text" class="form-control" name="name" id="name" placeholder="<?= $data->memId; ?>" disabled>
                   </td>
                 </tr>
                 <tr>
@@ -157,7 +155,7 @@ $data = $result->fetch_object();
       </div>
       <Form action="" id="teacher_save" method="" enctype="multipart/form-data">
         <div class="mt-3 d-flex justify-content-end">
-          <a href="teacher_update.php?mid=<?= $data->mid; ?>" class="btn btn-primary btn-md">수정하기</a>
+          <a href="teacher_update.php?memId=<?= $data->memId; ?>" class="btn btn-primary btn-md">수정하기</a>
         </div>
       </Form>
     </div>

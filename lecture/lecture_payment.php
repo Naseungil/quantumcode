@@ -7,7 +7,7 @@ if (empty($_POST['lid']) || empty($_POST['mid']) || empty($_POST['total_price'])
   exit;
 }
 
-$ucid = $_POST['ucid'] ?? '';
+$ucid = $_POST['ucid'] ?? 0;
 $lids = $_POST['lid'];
 $mid = $_POST['mid'];
 $total_price = $_POST['total_price'];
@@ -18,7 +18,7 @@ $lidsArray = explode(',', $lids);
 
 $lidArr = [];
 $placeholders = implode(',', $lidsArray); // lid 값들 문자열로 결합
-$sql = "SELECT lid FROM lecture_order WHERE mid = $mid AND lid IN ($placeholders)";
+$sql = "SELECT lid FROM lecture_order WHERE mid = '$mid' AND lid IN ($placeholders)";
 
 // 쿼리 실행
 $result = $mysqli->query($sql);
@@ -41,12 +41,12 @@ if (!empty($duplicates)) {
 }
 
 if (!empty($ucid)) {
-  $up_sql = "UPDATE coupons_usercp SET status = 2, usedate = now() WHERE ucid = $ucid";
+  $up_sql = "UPDATE coupons_usercp SET status = 0, usedate = now() WHERE ucid = $ucid";
   $up_result = $mysqli->query($up_sql);
 }
 
 
-$sql = "INSERT INTO lecture_order (mid, lid, total_price, status) VALUES ($mid, '$lids', $total_price, 1)";
+$sql = "INSERT INTO lecture_order (mid, lid, total_price, cid, status) VALUES ('$mid', '$lids', $total_price, $ucid, 1)";
 $result = $mysqli->query($sql);
 if (!$result) {
   echo json_encode(['status' => 'error', 'message' => $stmt->error]);

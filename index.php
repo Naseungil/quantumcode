@@ -5,6 +5,69 @@ $slick_css = "<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/
 $slick_js = "<script src=\"https://cdnjs.cloudflare.com/ajax/libs/slick-carousel/1.9.0/slick.min.js\" integrity=\"sha512-HGOnQO9+SP1V92SrtZfjqxxtLmVzqZpjFFekvzZVWoiASSQgSr4cw9Kqd2+l8Llp4Gm0G8GIFJ4ddwZilcdb8A==\" crossorigin=\"anonymous\" referrerpolicy=\"no-referrer\"></script>";
 
 include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/inc/header.php');
+//$email = $_SESSION['MemEmail']; $memId = $_SESSION['MemId']; 로 되어있다.
+
+//추천강의
+// 사용자 카테고리 기반 맞춤 추천 강의 데이터 가져오기
+$query = "
+    SELECT 
+        lc.code, 
+        IFNULL(lc.pcode, NULL) AS pcode, 
+        IFNULL(lc.ppcode, NULL) AS ppcode
+    FROM 
+        user_categories AS uc
+    INNER JOIN 
+        lecture_category AS lc
+    ON 
+        JSON_CONTAINS(uc.category, JSON_QUOTE(lc.name))
+    WHERE 
+        uc.user_email = ?
+";
+
+$stmt = $mysqli->prepare($query);
+if (!$stmt) {
+  die('카테고리 쿼리 준비 실패: ' . $mysqli->error);
+}
+
+$stmt->bind_param("s", $email);
+$stmt->execute();
+$result = $stmt->get_result();
+
+$customRecommendedLectures = []; // 맞춤 추천 강의 배열
+
+while ($row = $result->fetch_assoc()) {
+  $combinedCustomOrder = ($row['ppcode'] !== null ? $row['ppcode'] : 'NULL')
+    . ($row['pcode'] !== null ? $row['pcode'] : 'NULL')
+    . $row['code'];
+
+  $lectureQuery = "
+        SELECT 
+            lid, category, title, cover_image, t_id, isfree, ispremium, ispopular, isrecom, 
+            tuition, dis_tuition, regist_day, expiration_day, sub_title, difficult 
+        FROM 
+            lecture_list 
+        WHERE 
+            category = ?
+        ORDER BY 
+            student_count DESC 
+        LIMIT 10
+    ";
+
+  $lectureStmt = $mysqli->prepare($lectureQuery);
+  if (!$lectureStmt) {
+    die('강의 쿼리 준비 실패: ' . $mysqli->error);
+  }
+
+  $lectureStmt->bind_param("s", $combinedCustomOrder);
+  $lectureStmt->execute();
+  $lectureResult = $lectureStmt->get_result();
+
+  while ($lectureRow = $lectureResult->fetch_assoc()) {
+    $customRecommendedLectures[] = $lectureRow;
+  }
+
+  $lectureStmt->close();
+}
 
 //인기 강의
 $sql = "SELECT * FROM lecture_list WHERE ispopular = 1";
@@ -38,17 +101,21 @@ while ($data4 = $result4->fetch_object()) {
   $dataArr4[] = $data4;
 }
 
-$review_sql = "SELECT * FROM lecture_review";
+$review_sql = "SELECT lr.*, l.title 
+FROM lecture_review lr
+LEFT JOIN lecture_list l
+ON lr.lid = l.lid
+";
 $review_result = $mysqli->query($review_sql);
 $reviewArr = [];
-while($review_row = $review_result->fetch_object()){
+while ($review_row = $review_result->fetch_object()) {
   $reviewArr[] = $review_row;
 }
 
 $notice_sql = "SELECT * FROM board WHERE category = 'notice'";
 $notice_result = $mysqli->query($notice_sql);
 $noticeArr = [];
-while($notice_row = $notice_result->fetch_object()){
+while ($notice_row = $notice_result->fetch_object()) {
   $noticeArr[] = $notice_row;
 }
 
@@ -87,31 +154,31 @@ while($notice_row = $notice_result->fetch_object()){
       <h2 class=" "><i class="fa-solid fa-triangle-exclamation"></i> 공지</h2>
       <div class="notice_slides ">
         <?php
-        if(!empty($noticeArr)){
+        if (!empty($noticeArr)) {
           $today = date("Y.m.d", time());
-          if(count($reviewArr) > 0 ){
-          foreach($noticeArr as $notice){
-            $date = date_create($notice->date);
+          if (count($noticeArr) > 0) {
+            foreach ($noticeArr as $notice) {
+              $date = date_create($notice->date);
         ?>
-        <div class="notice_text d-flex justify-content-between">
-          <span><?= $notice->title ?></span>
-          <span><?= date_format($date, 'Y.m.d')?></span>
-        </div>
-        <?php
-          }
-          }else{
-            
-            ?>
-        <div class="notice_text d-flex justify-content-between"> 
-          <span>[공지사항] 신규 업데이트가 없습니다</span>
-          <span><?= $today ?></span>
-        </div>
-        <div class="notice_text d-flex justify-content-between"> 
-          <span>[공지사항] 신규 업데이트가 없습니다</span>
-          <span><?= $today ?></span>
-        </div>
+              <div class="notice_text d-flex justify-content-between">
+                <span><?= $notice->title ?></span>
+                <span><?= date_format($date, 'Y.m.d') ?></span>
+              </div>
             <?php
-            
+            }
+          } else {
+
+            ?>
+            <div class="notice_text d-flex justify-content-between">
+              <span>[공지사항] 신규 업데이트가 없습니다</span>
+              <span><?= $today ?></span>
+            </div>
+            <div class="notice_text d-flex justify-content-between">
+              <span>[공지사항] 신규 업데이트가 없습니다</span>
+              <span><?= $today ?></span>
+            </div>
+        <?php
+
           }
         }
         ?>
@@ -123,7 +190,7 @@ while($notice_row = $notice_result->fetch_object()){
     </div>
   </section>
   <section class="skill_tag container ">
-   <div >
+    <div>
       <figure>
         <div><img src="./img/icon-img/html_icon.svg" alt=""></div>
         <figcaption>HTML</figcaption>
@@ -164,9 +231,97 @@ while($notice_row = $notice_result->fetch_object()){
         <div><img src="./img/icon-img/vue_icon.svg" alt=""></div>
         <figcaption>Vue.js</figcaption>
       </figure>
-   </div>
-    <p id="skill_filter" class="d-flex"></p>
+    </div>
+    <p class="skill_cnt"></p>
+    <p id="skill_filter" class="d-flex">
+
+    </p>
   </section>
+
+
+
+  <!-- user_categories 테이블에서 user_email이 $_SESSION['MemEmail']과 같은 경우에만 조건문을 보여주도록  -->
+  <?php
+  if (isset($_SESSION['MemEmail'])) {
+    $email = $_SESSION['MemEmail'];
+
+    // Check if the user_email exists in the user_categories table
+    $checkUserQuery = "SELECT 1 FROM user_categories WHERE user_email = ?";
+    $checkUserStmt = $mysqli->prepare($checkUserQuery);
+    if (!$checkUserStmt) {
+      die('사용자 확인 쿼리 준비 실패: ' . $mysqli->error);
+    }
+
+    $checkUserStmt->bind_param("s", $email);
+    $checkUserStmt->execute();
+    $userExists = $checkUserStmt->get_result()->fetch_row();
+
+    $checkUserStmt->close();
+
+    // Display the content only if the user_email exists in the user_categories table
+    if ($userExists) {
+  ?>
+      <div class="recom_algorithm container"> <!-- Flex 컨테이너 -->
+        <h6><?php echo htmlspecialchars($_SESSION['MUNAME']); ?>님을 위한 맞춤별 추천 강의</h6>
+        <h3 class="mb-3">맞춤별 추천 강의</h3>
+        <p>관심있는 강의를 추천알고리즘을 통해 만나보세요!</p>
+        <div class="algorithm">
+          <?php
+          foreach ($customRecommendedLectures as $item) {
+            $tuition = '';
+            if ($item['dis_tuition'] > 0) {
+              $tui_val = number_format($item['tuition']);
+              $distui_val = number_format($item['dis_tuition']);
+              $tuition .= "<p class=\"active-font\"> $distui_val 원 </p><p class=\"text-decoration-line-through small-font\"> $tui_val 원 </p>";
+            } else {
+              $tui_val = number_format($item['tuition']);
+              $tuition .=  "<p class=\"active-font\"> $tui_val 원 </p><p class=\"small-font\"> &nbsp; </p>";
+            }
+          ?>
+            <section class="slide d-flex flex-column justify-content-between">
+              <div>
+                <div class="cover mb-2">
+                  <img src="<?= htmlspecialchars($item['cover_image']) ?>" alt="강의 이미지">
+                </div>
+                <div class="info">
+                  <div class="title">
+                    <h5 class="small-font mb-0"><a href="lecture/lecture_view.php?lid=<?= htmlspecialchars($item['lid']) ?>"><?= htmlspecialchars($item['title']) ?></a></h5>
+                  </div>
+                  <div class="tuition">
+                    <?= $tuition ?>
+                  </div>
+                  <ul class="tags">
+                    <?php if ($item['ispopular']): ?>
+                      <li class="tag"><span> 인기 </span></li>
+                    <?php endif; ?>
+                    <?php if ($item['isrecom']): ?>
+                      <li class="tag"><span> 추천 </span></li>
+                    <?php endif; ?>
+                    <?php if ($item['ispremium']): ?>
+                      <li class="tag"><span> 프리미엄 </span></li>
+                    <?php endif; ?>
+                    <?php if ($item['isfree']): ?>
+                      <li class="tag"><span> 무료 </span></li>
+                    <?php endif; ?>
+                  </ul>
+                </div>
+              </div>
+            </section>
+          <?php
+          }
+          ?>
+        </div>
+        <div class="algorithm_controls">
+          <button type="button" class="slick-prev"><i class="fa-solid fa-chevron-left"></i></button>
+          <button type="button" class="slick-next"><i class="fa-solid fa-chevron-right"></i></button>
+        </div>
+      </div>
+  <?php
+    } else {
+      // echo "<p>추천 강의가 없습니다. 관심 카테고리를 설정해주세요!</p>";
+    }
+  }
+  ?>
 
   <div class="main_popular container"> <!-- Flex 컨테이너 -->
     <h6>BEST</h6>
@@ -233,7 +388,7 @@ while($notice_row = $notice_result->fetch_object()){
           $tuition .=  "<p class=\"active-font\"> $tui_val 원 </p><p class=\"small-font\"> &nbsp; </p>";
         }
         $title = $item->title;
-        if(iconv_strlen($title) > 35){
+        if (iconv_strlen($title) > 35) {
           $title = iconv_substr($title, 0, 35) . '...';
         }
       ?>
@@ -303,63 +458,62 @@ while($notice_row = $notice_result->fetch_object()){
       <button>퀀텀코드 자세히 알기</button>
     </div>
   </section>
-<!-- 수강평 3개 이하면 임시 더미 텍스트 -->
+  <!-- 수강평 3개 이하면 임시 더미 텍스트 -->
   <section class="container main_review">
     <h3 class="d-flex justify-content-between"><b>수강생 후기</b><a href="#">더보기</a> </h3>
     <div class="review_content d-flex gap-3">
       <?php
-      if(!empty($reviewArr)){
-        if(count($reviewArr) > 2){
-        foreach($reviewArr as $review){
+      if (!empty($reviewArr)) {
+        if (count($reviewArr) > 2) {
+          foreach ($reviewArr as $review) {
       ?>
-      <figure class="d-flex align-items-center">
-        <img src="http://<?= $_SERVER['HTTP_HOST'] ?>/qc<?= $review-> profile_image ?>" alt="회원 프로필 이미지">
-        <figcaption>
-          <div class="d-flex gap-3">
-            <b><?= $review-> username ?></b>
-            <!-- 테이블 컬럼 추가해야함 -->
-            <span>만들면서 배우는 리액트</span>
-           </div>
-          <p><?= $review-> comment ?> </p>
-        </figcaption>
-      </figure>
-      <?php
-            }
-          }else{
-            ?>
-      <figure class="d-flex align-items-center">
-        <img src="./img/core-img/어드민_이미지.png" alt="">
-        <figcaption>
-          <div>
-            <b>김민준</b>
-            <span>만들면서 배우는 리액트</span>
-          </div>
-          <p>리액트를 처음 접했는데, 퀀텀코드 강의 덕분에 프로젝트를 직접 만들며 빠르게 배울 수 있었습니다. 강의가 체계적이고 실습 위주라서 이해가 정말 잘 돼요. </p>
-        </figcaption>
-      </figure>
-      <figure class="d-flex align-items-center">
-        <img src="./img/core-img/어드민_이미지.png" alt="">
-        <figcaption>
-          <div>
-            <b>김민준</b>
-            <span>만들면서 배우는 리액트</span>
-          </div>
-          <p>리액트를 처음 접했는데, 퀀텀코드 강의 덕분에 프로젝트를 직접 만들며 빠르게 배울 수 있었습니다. 강의가 체계적이고 실습 위주라서 이해가 정말 잘 돼요. </p>
-        </figcaption>
-      </figure>
-      <figure class="d-flex align-items-center">
-        <img src="./img/core-img/어드민_이미지.png" alt="">
-        <figcaption>
-          <div>
-            <b>김민준</b>
-            <span>만들면서 배우는 리액트</span>
-          </div>
-          <p>리액트를 처음 접했는데, 퀀텀코드 강의 덕분에 프로젝트를 직접 만들며 빠르게 배울 수 있었습니다. 강의가 체계적이고 실습 위주라서 이해가 정말 잘 돼요. </p>
-        </figcaption>
-      </figure>
-<?php
+            <figure class="d-flex align-items-start">
+              <img src="http://<?= $_SERVER['HTTP_HOST'] ?>/qc<?= $review->profile_image ?>" alt="회원 프로필 이미지">
+              <figcaption>
+                <div class="d-flex gap-3">
+                  <b><?= $review->username ?></b>
+                  <span><?= $review->title ?></span>
+                </div>
+                <p><?= $review->comment ?> </p>
+              </figcaption>
+            </figure>
+          <?php
           }
+        } else {
+          ?>
+          <figure class="d-flex align-items-start">
+            <img src="./img/core-img/어드민_이미지.png" alt="">
+            <figcaption>
+              <div>
+                <b>김민준</b>
+                <span>만들면서 배우는 리액트</span>
+              </div>
+              <p>리액트를 처음 접했는데, 퀀텀코드 강의 덕분에 프로젝트를 직접 만들며 빠르게 배울 수 있었습니다. 강의가 체계적이고 실습 위주라서 이해가 정말 잘 돼요. </p>
+            </figcaption>
+          </figure>
+          <figure class="d-flex align-items-start">
+            <img src="./img/core-img/어드민_이미지.png" alt="">
+            <figcaption>
+              <div>
+                <b>김민준</b>
+                <span>만들면서 배우는 리액트</span>
+              </div>
+              <p>리액트를 처음 접했는데, 퀀텀코드 강의 덕분에 프로젝트를 직접 만들며 빠르게 배울 수 있었습니다. 강의가 체계적이고 실습 위주라서 이해가 정말 잘 돼요. </p>
+            </figcaption>
+          </figure>
+          <figure class="d-flex align-items-start">
+            <img src="./img/core-img/어드민_이미지.png" alt="">
+            <figcaption>
+              <div>
+                <b>김민준</b>
+                <span>만들면서 배우는 리액트</span>
+              </div>
+              <p>리액트를 처음 접했는데, 퀀텀코드 강의 덕분에 프로젝트를 직접 만들며 빠르게 배울 수 있었습니다. 강의가 체계적이고 실습 위주라서 이해가 정말 잘 돼요. </p>
+            </figcaption>
+          </figure>
+      <?php
         }
+      }
       ?>
     </div>
     <div class="review_controls">
@@ -430,9 +584,9 @@ while($notice_row = $notice_result->fetch_object()){
       ?>
     </div>
   </section>
-<!-- 검색 메뉴 ? 출력 ? -->
+  <!-- 검색 메뉴 ? 출력 ? -->
   <section class="main_category container">
-    <h3 >그래도 관심가는 강의를 찾지 못했다면</h3>
+    <h3>그래도 관심가는 강의를 찾지 못했다면</h3>
     <p>아래 키워드를 검색해보세요 </p>
     <div class="keywords">
       <div class="tech">
@@ -458,6 +612,7 @@ while($notice_row = $notice_result->fetch_object()){
         <span>Docker</span>
       </div>
     </div>
+    <div id="tech_filter"></div>
   </section>
 </main>
 
@@ -465,6 +620,7 @@ while($notice_row = $notice_result->fetch_object()){
 <script>
   const $pagination = $(".custom-pagination");
 
+  //slick 슬라이드
   $(".main_slides").on("init reInit afterChange", function(event, slick, currentSlide) {
     const totalSlides = slick.slideCount;
     const current = (currentSlide || 0) + 1;
@@ -476,7 +632,6 @@ while($notice_row = $notice_result->fetch_object()){
     $pagination.find(".custom-dot").removeClass("active");
     $pagination.find(`.custom-dot:nth-child(${current})`).addClass("active");
   });
-
   $('.main_slides').slick({
     speed: 300,
     autoplay: true,
@@ -488,7 +643,6 @@ while($notice_row = $notice_result->fetch_object()){
     slidesToShow: 1,
     slidesToScroll: 1,
   });
-
   $('.notice_slides').slick({
     speed: 300,
     vertical: true,
@@ -497,7 +651,6 @@ while($notice_row = $notice_result->fetch_object()){
     prevArrow: $('.main_notice .slick-prev'),
     nextArrow: $('.main_notice .slick-next'),
   });
-
   $('#skill_filter').slick({
 
     infinite: false,
@@ -505,7 +658,14 @@ while($notice_row = $notice_result->fetch_object()){
     slidesToShow: 4,
     slidesToScroll: 1,
   })
- 
+  $('.algorithm').slick({
+    infinite: false,
+    speed: 300,
+    slidesToShow: 4,
+    slidesToScroll: 1,
+    prevArrow: $('.recom_algorithm .slick-prev'),
+    nextArrow: $('.recom_algorithm .slick-next'),
+  });
   $('.popular').slick({
 
     infinite: false,
@@ -554,7 +714,7 @@ while($notice_row = $notice_result->fetch_object()){
     infinite: false,
     speed: 300,
     slidesToShow: 2,
-    slidesToScroll: 1, 
+    slidesToScroll: 1,
 
     infinite: true, // 무한 반복
     arrows: true, // 화살표 표시
@@ -566,7 +726,7 @@ while($notice_row = $notice_result->fetch_object()){
     slidesPerRow: 4, // 각 행에 표시할 슬라이드 개수
     infinite: true, // 무한 반복
     arrows: true, // 화살표 표시
-   
+
     prevArrow: $('.main_recom .slick-prev'),
     nextArrow: $('.main_recom .slick-next'),
   });
@@ -580,32 +740,54 @@ while($notice_row = $notice_result->fetch_object()){
   // Skill 필터 기능
   const skillTags = document.querySelectorAll('.skill_tag figure');
   const skillFilter = document.getElementById('skill_filter');
-  skillTags.forEach(skillTag =>{
-    skillTag.addEventListener('click', (e)=>{
+  const skillCnt = document.querySelector('.skill_cnt');
+
+  skillFilter.innerHTML = '<p>카테고리를 선택하면 강의를 바로 확인할 수 있습니다.</p>'
+  skillTags.forEach(skillTag => {
+    skillTag.addEventListener('click', (e) => {
+      skillTags.forEach(tag => {
+        const activeDiv = tag.querySelector('div.active');
+        if (activeDiv) {
+          activeDiv.classList.remove('active');
+        }
+      });
+
       const skill = e.currentTarget.querySelector('figcaption').textContent;
       console.log(skill);
       const data = new URLSearchParams({
-      skill: skill,
-    });
+        skill: skill,
+      });
       fetch('./main/skill_filter.php', {
-        method:'POST',
-        body:data,
-      })
-      .then(res => res.json())
-      .then(data => {
-        console.log(data);
-        skillFilter.innerHTML = data.skill;
+          method: 'POST',
+          body: data,
+        })
+        .then(res => res.json())
+        .then(data => {
+          console.log(data);
+          skillFilter.innerHTML = data.skill;
+          skillCnt.innerHTML = data.cnt;
+        }).catch(error => console.error("Error:", error));
+      const clickedDiv = e.currentTarget.querySelector('div');
+      if (clickedDiv) {
+        clickedDiv.classList.add('active');
       }
-      ).catch( error => console.error("Error:", error));
     })
   })
-
 
   // 커스텀 페이지네이션 생성
   const slideCount = $(".main_slides").slick("getSlick").slideCount;
   for (let i = 0; i < slideCount; i++) {
     $pagination.append(`<div class="custom-dot"></div>`);
   }
+
+  //카테고리 검색
+  const cateKeywords = document.querySelectorAll('.keywords .tech');
+  cateKeywords.forEach(keyword => {
+    keyword.addEventListener('click', (e) => {
+      const keywordText = e.target.innerText;
+      location.href = `lecture/lecture_list.php?search_keyword=${keywordText}`;
+    })
+  })
 
   // 첫 번째 dot 활성화
   $pagination.find(".custom-dot:first-child").addClass("active");

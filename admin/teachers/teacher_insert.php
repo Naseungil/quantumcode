@@ -287,17 +287,19 @@ function addCover(file, cover) {
       $('#id').focus();
     } else{
       Check_func('id', value);
-      console.log('보내지는 것도됌')
+      console.log('아이디 보내지는 것도됌')
     }
   });
 
   $('#emailCheck').click(function(){
     let value = $('#email').val();
     if(value == ''){
-      alert('email을 입력해주세요 111 ');
+      alert('email을 입력해주세요');
       $('#email').focus();
     } else{
       Check_func('email', value);
+      console.log('이메일 보내지는 것도됌')
+
     }
   });
 
@@ -305,10 +307,11 @@ function addCover(file, cover) {
     let value = $('#number').val();
     console.log(value);
     if(value == ''){
-      alert('전화번호를 입력해주세요 111');
+      alert('전화번호를 입력해주세요');
       $('#number').focus();
     } else{
       Check_func('number', value);
+      console.log('번호 보내지는 것도됌')
     }
   });
 

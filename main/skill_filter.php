@@ -5,30 +5,42 @@ include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/admin/inc/dbcon.php');
 $skill = $_POST['skill'] ?? '';
 
 $skill_html = '';
-if($skill){
+if ($skill) {
+  $count_sql = "SELECT COUNT(*) AS cnt
+  FROM lecture_list l 
+  JOIN lecture_category c 
+  ON l.lcid = c.lcid
+  WHERE c.name = '$skill'";
+  $count_result = $mysqli->query($count_sql);
+  $count_data = $count_result->fetch_object();
+  if ($count_data->cnt > 0) {
+    $cnt = "검색된 강의 개수는 $count_data->cnt 개 입니다";
+  } else {
+    $cnt = "검색된 강의가 없습니다.";
+  }
 
-$sql = "SELECT l.*, c.*
-FROM lecture_list l 
-JOIN lecture_category c 
-ON l.lcid = c.lcid
-WHERE c.name = '$skill'";
+  $sql = "SELECT l.*, c.*
+  FROM lecture_list l 
+  JOIN lecture_category c 
+  ON l.lcid = c.lcid
+  WHERE c.name = '$skill'";
+  $result = $mysqli->query($sql);
 
-$result = $mysqli->query($sql);
+  if ($result) {
+    $skill_html .= "";
+    while ($item = $result->fetch_object()) {
+      $tuition = '';
+      if ($item->dis_tuition > 0) {
+        $tui_val = number_format($item->tuition);
+        $distui_val = number_format($item->dis_tuition);
+        $tuition .= "<p class=\"active-font\"> $distui_val 원 </p><p class=\"text-decoration-line-through small-font\"> $tui_val 원 </p>";
+      } else {
+        $tui_val = number_format($item->tuition);
+        $tuition .=  "<p class=\"active-font\"> $tui_val 원 </p><p class=\"small-font\"> &nbsp; </p>";
+      }
 
- 
-if($result){
-  while ($item = $result->fetch_object()) {
-    $tuition = '';
-        if ($item->dis_tuition > 0) {
-          $tui_val = number_format($item->tuition);
-          $distui_val = number_format($item->dis_tuition);
-          $tuition .= "<p class=\"active-font\"> $distui_val 원 </p><p class=\"text-decoration-line-through small-font\"> $tui_val 원 </p>";
-        } else {
-          $tui_val = number_format($item->tuition);
-          $tuition .=  "<p class=\"active-font\"> $tui_val 원 </p><p class=\"small-font\"> &nbsp; </p>";
-        }
-
-    $skill_html .= "
+      $skill_html .= "
+      
     <div class=\"slide mx-3\">
           <img src=\"$item->cover_image\" alt=\"\">
           <div class=\"info d-flex flex-column gap-3 justify-content-between\">
@@ -42,15 +54,15 @@ if($result){
           </div>
         </div>
     ";
+    }
+  } else {
+    $skill_html .= "<p>검색 결과가 없습니다</p>";
   }
-}else{
-  $skill_html .= "<p>검색 결과가 없습니다</p>";
-}
-}
-else{
+} else {
   $skill_html .= "skill이 없습니다";
 }
 echo json_encode([
-  'skill' => $skill_html
+  'skill' => $skill_html,
+  'cnt' => $cnt
 ]);
 exit;

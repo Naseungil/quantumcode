@@ -1,3 +1,6 @@
+.wrapper{
+  position: relative;
+}
 p {
   margin-bottom: 0;
   font-size: 14px;
@@ -74,6 +77,7 @@ p {
   }
 }
 
+
 .payment{
   background: #ebebeb;
   dl{
@@ -90,7 +94,9 @@ p {
  .cart_check {
   display: none;
 }
-
+.cart{
+  margin-top: 48px;
+}
 /* 체크박스 레이블 */
 .cart_label {
   display: inline-block;
@@ -101,7 +107,495 @@ p {
   cursor: pointer;
 }
 
+
 /* 체크박스 선택 시 */
  .cart_check:checked + .cart_label {
   background-image: url('../img/icon-img/Check_Y.svg');
+}
+.wrapper{
+  position: relative;
+}
+.lecture_coverImg,
+.lecture_prVideo,
+.lecture_video {
+  width: 100%;
+  height: 220px;
+  background: #ebebeb;
+}
+.lecture_coverImg img,
+.lecture_prVideo video,
+.lecture_video video,
+.cover img {
+  max-width: 100%;
+  max-height: 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* .table>:not(caption)>*>*{
+  padding:0;
+  margin-bottom: .5rem;
+} */
+
+.twoculumn_table {
+  display: flex !important;
+  align-items: center !important;
+}
+.search {
+  width: 25%; /* .search의 너비 설정 */
+  display: flex; /* 내부 요소들을 flex 컨테이너로 설정 */
+  justify-content: flex-end; /* 내부 요소들을 오른쪽으로 정렬 */
+  gap: 0.5rem; /* 버튼과 입력 요소 간의 간격 */
+  margin-left: auto; /* 부모 컨테이너 내에서 오른쪽 끝으로 이동 */
+}
+
+.search .btn {
+  width: 25%; /* 버튼의 너비 */
+}
+
+tbody,
+td,
+tfoot,
+th,
+thead,
+tr {
+  border: none;
+}
+
+table tr td span {
+  margin-right: 120px;
+}
+
+table tr td {
+  padding: 0.5rem !important;
+}
+
+textarea#sub_title {
+  height: 300px;
+}
+
+textarea#objectives,
+textarea#tag {
+  height: 150px;
+}
+
+.lecture h3,
+.lecture h4,
+.lecture h5,
+.lecture h6 {
+  font-weight: 600;
+}
+
+.lecture_button{
+  margin-right: 24px;
+}
+
+.lecture input {
+  z-index: 0;
+}
+.lecture_prVideo {
+  position: relative;
+  z-index: 0;
+}
+
+#prVideo_type {
+  position: absolute;
+  bottom: 0;
+}
+.category select,
+.category input,
+.modal input {
+  width: 70%;
+}
+.modal.edit input{
+  width: 100%;
+}
+.category button.btn,
+.modal button.btn {
+  width: 20%;
+}
+.category input {
+  width: 70%;
+}
+.category h5 {
+  color: var(--primary);
+}
+
+
+/* MODAL */
+.modal-bg {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.modal-backdrop {
+  z-index: 1000;
+}
+.category .modal {
+  top: 30%;
+}
+
+.hidden .select_form select {
+  width: 40%;
+}
+
+.table .thline th {
+  color: var(--darkBlue) !important;
+}
+/* View */
+.content{
+  position: relative;
+}
+section.info{
+  background: #001E4A;
+  color: var(--white);
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  justify-content: space-between;
+  flex-direction: column;
+  padding: 24px;
+  gap: 64px;
+  .learnObj{
+    width: 70%;
+  }
+}
+
+section.info::after {
+  content: '';
+  display: block;
+  width: 584px;
+  height: 435px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 0;
+  background: url(../img/core-img/bg-logo-view.svg) no-repeat center top / 100%;
+}
+
+p{
+  margin-bottom : 0;
+  font-size: 14px;
+}
+
+.small-font{
+  font-size: 14px;
+  line-height: 19px;
+}
+.normal-font{
+  font-size: 24px;
+  line-height: 40px;
+}
+.font{
+  font-size: 20px;
+  line-height: 29px;
+}
+.learnObj p{
+  color: #ABABAB;
+}
+
+section h4, section h6{
+  margin-bottom: 0;
+}
+
+section h6{
+  line-height: 24px;
+}
+
+.info ul, .slide ul{
+  list-style: none;
+  padding-left: 0;
+  display: flex;
+  flex-direction: column;
+  gap:5px;
+}
+.slide li{
+  font-size: 12px;
+}
+.slide .like img{
+  filter: invert(1);
+  width: 15px;
+  height: 15px;
+}
+
+.tag{
+  display: flex;
+  gap: 5px;
+}
+
+.tag span{
+  color:var(--white);
+  background: rgba(60,139,255,0.5);
+  border-radius: 6px;
+  padding: 2px 15px;
+}
+.lecture_coverImg{
+  width: 17%;
+  position: absolute;
+  top: 24px;
+  right:  calc(20% - 24px);
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+aside .tuition{
+  width: 17%;
+  position: absolute;
+  right:  calc(20% - 24px);
+  top: 90%;
+  background: #dee2e6;
+  border-radius: 10px 10px 0 0;
+}
+aside .tuitionInfo{
+  background: var(--white);
+  padding: 20px 24px 30px;
+  border-radius: 10px 10px 0 0;
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+  display: flex;
+  justify-content: space-between;
+  h4{
+    font-size: 24px;
+  }
+  .active-font{
+    font-size: 20px;
+  }
+}
+aside .tuitionDesc{
+  margin-bottom: 0;
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  dt{
+    color: var(--darkGray);
+    span{
+      color:var(--black);
+      
+    }
+  }
+}
+aside .asideDesc{
+  padding: 24px;
+}
+aside .tuition.sticky{
+  position: fixed;
+  top: 50px;
+}
+
+.like{
+  display: flex;
+  gap: 10px;
+  img{
+    width: 25px;
+    height: 25px;
+  }
+} 
+section.desc{
+  padding: 24px;
+  
+  margin-bottom: 60px;
+  h3{
+    font-size: 30px;
+  }
+  p{
+    font-size: 24px;
+  }
+}
+.view.modal{
+  --bs-modal-width : 400px
+}
+.view.modal .btn{
+  width: auto;
+}
+.view .modal-header{
+  padding: 10px 20px;
+}
+.view .modal-body{
+  padding: 20px;
+}
+.view .modal-body b{
+  font-weight: 500;
+  font-size: 24px;
+}
+.view .modal-body ul{
+  list-style: none;
+  padding: 0;
+}
+.view .modal-body li{
+  display: flex;
+  justify-content: start;
+}
+.view .modal-body span{
+  width: 30%;
+  color: #797979;
+  font-weight: 400;
+}
+.view .modal-body strong{
+  font-weight: 500;
+  color: #495057;
+}
+.view .modal-footer{
+  padding: 10px 20px;
+}
+
+.lecture_review{
+  margin-bottom: 60px;
+}
+.lecture_review .review .name{
+  width: 13%;
+}
+.review{
+  width: 66%;
+  padding: 20px;
+  border-bottom: 2px solid #797979;
+  *{
+    margin-bottom: 0;
+  }
+}
+.review .btn, .reply .btn, .rereply .btn{
+  width:70px; 
+  height: 38px;
+}
+.reply, .rereply{
+  width: calc(66% - 100px);
+  padding: 20px ;
+  border-bottom: 2px solid #797979;
+
+  margin-left: 100px;
+}
+
+.content .slick-prev, .content  .slick-next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: rgba(0, 0, 0, 0.5);
+  font-size: 1.5rem;
+  border-style: none;
+  background: transparent;
+  width: 15px;
+  height: 15px;
+}
+
+.content .slick-prev{
+  left: -25px;
+}
+
+.content .slick-next{
+  right: -25px;
+}
+
+/* .slide{
+
+  box-shadow: 0 2px 4px rgba(0,0,0,.1);
+} */
+
+.slick-slide {
+  margin-left: 24px; 
+  a {
+    text-decoration: none;
+    color: #000;
+  }
+}
+
+.slick-slide:first-child{
+  margin-left: 0; 
+}
+
+.slick-list {
+  text-align: left; /* 슬라이더 전체를 왼쪽 정렬 */
+}
+
+.slick-track{
+  display: flex;
+  justify-content: flex-start;
+}
+/* search_banner */
+.search_banner {
+  position: relative;
+  background: #0D6EFD;
+  overflow: hidden;
+  min-height: 300px;
+  margin-bottom: 40px;
+ 
+}
+.search_banner::after {
+  content: '';
+  display: block;
+  width: 584px;
+  height: 435px;
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 0;
+  background: url(../img/core-img/bg-logo.svg) no-repeat center top / 100%;
+}
+.search_banner h2{
+  font-size: 45px;
+  font-weight: 600;
+  color:white;
+  margin: 48px 0;
+}
+.search_banner form {
+  display: flex;
+  z-index: 10;
+  flex:1;
+}
+.search_banner .search_keyword{
+  border: none;
+  width: 100%;
+  height: 60px;
+  line-height: 60px;
+  padding: 15px;
+}
+.search_banner .search_btn{
+  width: 60px;
+  height: 60px;
+  border: none;
+  background: #001E4A;
+  color: #fff;
+}
+.search_banner .search_keyword:focus-visible {
+  outline: 2px solid transparent;
+  outline-offset: 1px;
+}
+.search_all{
+  z-index: 10;
+  border: none;
+  height: 60px;
+  font-weight: 600;
+  font-size: 20px;
+  padding: 15px 35px;
+  background: #001E4A;
+  color: #fff;
+}
+#filterForm{
+  margin-bottom: 40px;
+}
+.lecture_list .page{
+  margin: 60px 0;
+}
+.preview_video h5{
+  margin-bottom: 20px;
+  font-weight: 700;
+  font-size: 24px;
+}
+.preview_video{
+  width: 66%;
+}
+.preview_video video{
+  width: 100%;
+  height: 500px;
+}
+.view hr{
+  margin: 3rem 0;
+}
+.list_control{
+  margin-bottom: 60px;
 }

@@ -1,66 +1,66 @@
 /* 타이틀 박스 */
-.title_box{
+.title_box {
   height: 150px;
   background: url(../img/core-img/Logo_board.svg) no-repeat var(--primary);
-  filter: #2A7FFC;
+  filter: #2a7ffc;
   background-position: right 50px center;
   align-items: center;
   display: flex;
   align-items: center;
-  h2{
+  h2 {
     color: var(--white);
     font-size: 45px;
     font-weight: 800;
   }
 }
-.search_box{
+.search_box {
   height: 300px;
   background: url(../img/core-img/Logo_board.svg) no-repeat var(--primary);
-  filter: #2A7FFC;
+  filter: #2a7ffc;
   background-position: right 50px center;
   align-items: center;
   display: flex;
   align-items: center;
-  h2{
+  h2 {
     color: var(--white);
     font-size: 45px;
     font-weight: 800;
   }
-  form{
+  form {
     margin-top: 48px;
   }
-  .form-control{
-    border-radius:0 !important;
+  .form-control {
+    border-radius: 0 !important;
     height: 60px;
   }
-  .form-control:focus{
+  .form-control:focus {
     box-shadow: none !important;
   }
-  .btn{
+  .btn {
     width: 60px;
     height: 60px;
-    background-color: #001E4A;
-    color:var(--white);
-    border-radius:0 !important;
+    background-color: #001e4a;
+    color: var(--white);
+    border-radius: 0 !important;
   }
-  .fa-solid{
+  .fa-solid {
     font-size: 28px;
   }
 }
-.event_box{
+.event_box {
   height: 300px;
   background: url(../img/event/event_bg.png) no-repeat var(--primary);
-  filter: #2A7FFC;
+  filter: #2a7ffc;
   background-position: right 200px center;
   align-items: center;
   display: flex;
   align-items: center;
-  h2{
+  h2 {
     color: var(--white);
     font-size: 45px;
     font-weight: 800;
   }
-  p{
+  p {
     color: var(--white);
     font-size: 24px;
     font-weight: 600;
@@ -69,51 +69,40 @@
 }
 
 /* 기본 */
-.community.container{
-  padding-top:100px;
+.community.container {
+  padding-top: 100px;
   padding-bottom: 60px;
 }
-h6{
+h6 {
   color: var(--darkGray);
   line-height: 24px;
   margin-bottom: 20px;
 }
-.content hr,
-.view.container hr{
+.content hr {
   margin: 0;
   border: none;
   height: 1px;
   background-color: var(--lineGray);
 }
-.post span{
+.post span {
   padding: 4px;
   color: var(--darkGray);
   background-color: var(--lineGray);
   font-weight: 400;
-  border-radius:5px;
+  border-radius: 5px;
   margin-right: 20px;
-}
-.top{
-  display: flex;
-  justify-content: space-between;
-}
-.top a{
-  height: 30px;
-  font-size: 16px;
-  line-height: 16px;
-  padding:5px 15px;
 }
 
 /* 어사이드 */
-aside{
-  hr{
+aside {
+  hr {
     margin-top: 0;
     margin-bottom: 20px;
     border: none;
     height: 1px;
     background-color: var(--primary);
   }
-  li{
+  li {
     list-style: none;
     display: flex;
     align-items: center;
@@ -121,59 +110,60 @@ aside{
     padding-right: 1em;
     margin-bottom: 24px;
   }
-  a{
+  a {
     color: black;
     text-decoration: none;
   }
-  .fa-chevron-right{
+  .fa-chevron-right {
     font-size: 12px;
     color: var(--medium_gray);
   }
-  a.active{
+  a.active {
     font-weight: 700;
   }
-  a.active .fa-chevron-right{
-    color:black;
+  a.active .fa-chevron-right {
+    color: black;
   }
 }
 
 /* 테이블 기본 설정 */
-table{
+table {
   font-size: 18px;
   line-height: 20px;
 }
-thead{
+thead {
   color: var(--primary);
 }
-th,td{
-  padding: 18px !important;
+th,
+td {
+  padding: 11px !important;
 }
-tbody{
+tbody {
   font-weight: 400;
 }
 .num,
 .view,
 .recommend,
-.answer{
+.answer {
   width: 70px;
 }
-.post{
+.post {
   text-align: start;
 }
-.post a{
+.post a {
   padding-left: 18px;
   color: black;
   text-decoration: none;
 }
-.writer{
-width: 206px;
+.writer {
+  width: 206px;
 }
-.date{
+.date {
   width: 140px;
 }
 
 /* FAQ */
-.accordion{
+.accordion {
   font-size: 18px;
 }
 .accordion-item {
@@ -187,159 +177,30 @@ width: 206px;
   background-color: #fff !important; /* 흰색으로 변경 */
   color: #000 !important; /* 텍스트 색상 설정 */
 }
-.accordion-body{
+.accordion-body {
   background-color: var(--blueGray);
   font-size: 16px;
   padding: 16px 90px;
 }
-span{
+span {
   font-weight: 800;
   color: var(--primary);
   margin-right: 56px;
 }
 
 /* 이벤트 */
-.event button{
+.event button {
   color: var(--darkGray);
   background-color: var(--lineGray);
 }
-.event button:hover{
+.event button:hover {
   background-color: var(--lineGray);
 }
-.event button.active{
+.event button.active {
   color: var(--white);
   background-color: var(--primary);
   border: none;
 }
-.event button.active:hover{
+.event button.active:hover {
   background-color: var(--darkBlue);
-}
-
-
-/* 글 작성 */
-.write.container{
-  width: 960px;
-  input{
-    width: 100%;
-    border: none;
-    box-shadow: none;
-    color:var(--darkBlue);
-    background-color: var(--blueGray);
-    font-weight: 800;
-  }
-  .select{
-    margin: 40px 0 20px 0;
-  }
-  .select .btn-outline-primary{
-    --bs-btn-color: var(--darkGray) !important;
-    --bs-btn-border-color: var(--lineGray) !important;
-    --bs-btn-hover-color: var(--lineGray) !important;
-    --bs-btn-hover-bg: var(--lineGray);
-    --bs-btn-hover-border-color: var(--lineGray);
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    width: 25%;
-    border-radius: 0 !important;
-  }
-  .title{
-    height: 60px;
-    font-size: 30px;
-  }
-  .tag{
-    height: 40px;
-    font-size: 16pz;
-    margin: 20px 0;
-  }
-  .note-editor{
-    border-color: var(--lineGray);
-  }
-  .panel-heading{
-    background-color: var(--blueGray);
-  }
-  .send{
-    margin: 35px 0 45px 0;
-    text-align: end;
-  }
-  .send button{
-    padding:5px 20px;
-    line-height: 24px;
-    font-weight: 600;
-  }
-  .send #goback{
-    background-color: var(--darkGray);
-    color: var(--white);
-    margin-right: 1em;
-  }
-}
-.view.container{
-  width: 960px;
-  padding-top: 60px;
-  .view_title h2{
-   font-size: 24px;
-   line-height: 24px;
-   margin-bottom: 1em;
-  }
-  .view_sub{
-    display: flex;
-    gap:12px;
-    color: var(--darkGray);
-    margin-bottom: 40px;
-  }
-  .post .content{
-    margin-bottom: 60px;
-  }
-  .tag a{
-    background-color: var(--blueGray);
-    margin-right: 1em;
-  }
-  .tag{
-    margin-bottom: 40px;
-  }
-  .btn-outline-secondary{
-    --bs-btn-color: var(--darkGray) !important;
-    --bs-btn-border-color: var(--lineGray) !important;
-    --bs-btn-hover-color: var(--darkGray) !important;
-    --bs-btn-hover-bg: var(--lineGray);
-    --bs-btn-hover-border-color: var(--lineGray);
-    --bs-btn-active-color: #fff;
-    --bs-btn-active-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
-    padding: 6px 10px;
-    margin-right: 0.5em;
-  }
-  .btn-outline-primary{
-    margin-right: 0.5em;
-  }
-  hr{
-    margin: 40px 0;
-  }
-  .comment.container{
-    padding: 0;
-  }
-  li{
-    list-style: none;
-    margin-bottom: 24px;
-  }
-  .commentbox{
-    border: solid 1px var(--lineGray);
-    padding: 34px 0;
-  }
-  .commentbox_title{
-    padding:0 40px 34px;
-    border-bottom:solid 1px var(--lineGray);
-    display: flex;
-    justify-content: space-between;
-    h3{
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    p{
-      font-size: 12px;
-      color: var(--darkGray);
-      margin-bottom: 0;
-    }
-  }
-  .commentbox_content{
-    padding:34px 40px 0;
-  }
 }

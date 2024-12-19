@@ -119,7 +119,6 @@ if (count($list) > 0) {
 
 
 <div class="container">
-
   <form action="" class="search mb-3">
     <input type="text" name="search_keyword" class="form-control ">
     <button class=" btn btn-secondary">검색</button>

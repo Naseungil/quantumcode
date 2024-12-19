@@ -98,7 +98,7 @@ while($data = $result->fetch_object()){
               <td><?= $item->memEmail; ?></td>
               <td><?= $item->memCreatedAt; ?></td>
               <td><?= $item->grade; ?></td>
-              <td><a href="member_view.php?memid=<?= $item->memid;?>" class="btn btn-primary btn-sm">상세보기</a></td>
+              <td><a href="member_view.php?memId=<?= $item->memId;?>" class="btn btn-primary btn-sm">상세보기</a></td>
               <td>
                 <button type="button" class="btn btn-info" data-bs-toggle="modal" data-bs-target="#messageModal" data-mid="<?= $item->memId; ?>" >쪽지보내기</button>
               </td>

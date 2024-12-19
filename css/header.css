@@ -1,0 +1,18 @@
+
+.cart ul{
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  padding: 20px;
+  margin: 0;
+}
+.cart li{
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.cart li img{
+  width: 60px;
+  height: 40px;
+  margin: 0;
+}

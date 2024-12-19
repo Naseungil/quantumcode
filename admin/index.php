@@ -4,6 +4,16 @@ $admin_index_css = "<link href=\"http://{$_SERVER['HTTP_HOST']}/qc/admin/css/adm
 $chart_js = "<script src=\"https://cdn.jsdelivr.net/npm/chart.js\"></script>";
 include_once($_SERVER['DOCUMENT_ROOT'] . '/qc/admin/inc/header.php');
 
+$id = isset($_SESSION['AUID']) ? $_SESSION['AUID']  : $_SESSION['TUID'];
+if (!isset($id)) {
+  echo "
+    <script>
+      alert('관리자로 로그인해주세요');
+      location.href = './login.php';
+    </script>
+  ";
+}
+
 //강사 관련. 모든 강사 수
 $teacher_count_sql = "SELECT COUNT(*) AS total_teachers FROM teachers";
 $teacher_count = $mysqli->query($teacher_count_sql);
