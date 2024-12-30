@@ -3,7 +3,8 @@
 composer를 통한 기능을 사용하기 때문에 composer update를 해야만 정상적인 시연이 가능합니다.
 
 ```
-  composer update
+  https://getcomposer.org/ 에서 composer 설치후, 
+  터미널 창에서 composer update 입력 후 phpMailer 확인 후 존재 시 로그인 페이지 이용가능.
 ```
 
 ## 프로젝트 소개
